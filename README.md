@@ -1,0 +1,3 @@
+# dotFiles
+
+Sharing is caring! take it with a pinch of salt...
