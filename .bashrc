@@ -164,8 +164,13 @@ get_sha() {
 }
 source /usr/share/git/completion/git-prompt.sh
 
+GIT_PS1_SHOWDIRTYSTATE=1
+GIT_PS1_SHOWSTASHSTATE=1
+GIT_PS1_SHOWUNTRACKEDFILES=1
+GIT_PS1_SHOWUPSTREAM="verbose"
+#PS1='[\u@\h \W$(__git_ps1 " (%s)")]\$ '
 #PS1='[\u@\h \W]\$ '  # Default
 #PS1='\[\e[1;32m\]\u@\h:\W$(__git_ps1 " (%s $(get_sha))")\$\[\e[0m\] '
-PS1='\[\e[1;32m\]\W$(__git_ps1 " (%s $(get_sha))")\$\[\e[0m\] '
+PS1='\[\e[1;32m\]\W$(__git_ps1 " ($(get_sha) %s)")\$\[\e[0m\] '
 
 export EDITOR=vim # editor used by yaourt
