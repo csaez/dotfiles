@@ -52,38 +52,6 @@ case "$TERM" in
     xterm-color) color_prompt=yes;;
 esac
 
-# uncomment for a colored prompt, if the terminal has the capability; turned
-# off by default to not distract the user: the focus in a terminal window
-# should be on the output of commands, not on the prompt
-#force_color_prompt=yes
-
-if [ -n "$force_color_prompt" ]; then
-    if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
-	# We have color support; assume it's compliant with Ecma-48
-	# (ISO/IEC-6429). (Lack of such support is extremely rare, and such
-	# a case would tend to support setf rather than setaf.)
-	color_prompt=yes
-    else
-	color_prompt=
-    fi
-fi
-
-if [ "$color_prompt" = yes ]; then
-    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
-else
-    PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
-fi
-unset color_prompt force_color_prompt
-
-# If this is an xterm set the title to user@host:dir
-case "$TERM" in
-xterm*|rxvt*)
-    PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h: \w\a\]$PS1"
-    ;;
-*)
-    ;;
-esac
-
 # enable color support of ls and also add handy aliases
 if [ -x /usr/bin/dircolors ]; then
     test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
@@ -109,7 +77,6 @@ alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo
 # You may want to put all your additions into a separate file like
 # ~/.bash_aliases, instead of adding them here directly.
 # See /usr/share/doc/bash-doc/examples in the bash-doc package.
-
 if [ -f ~/.bash_aliases ]; then
     . ~/.bash_aliases
 fi
@@ -125,14 +92,14 @@ if ! shopt -oq posix; then
   fi
 fi
 
-# my custom alieases
+# my custom alias
 
-# activate virtual environment
-# ussage: activate env/
+# activate a python virtual environment
+# usage: activate venv/
 function activate() { source "$1"bin/activate ;}
 
 # symlink pyside from maya libraries
-# ussage: lnmaya env/
+# usage: lnmaya venv/
 function lnmaya() {
 	ln -s /usr/autodesk/maya/lib/python2.7/site-packages/PySide "$1"lib/python2.7/site-packages/PySide ;
 	ln -s /usr/autodesk/maya/lib/python2.7/site-packages/shiboken.so "$1"lib/python2.7/site-packages/shiboken.so ;
@@ -140,12 +107,13 @@ function lnmaya() {
 	ln -s /usr/autodesk/maya/lib/python2.7/site-packages/pysideuic "$1"lib/python2.7/site-packages/pysideuic ;
 }
 
-# run testsuite using nosetests + coverage
-# ussage: testme (from the root of your project)
+# run testsuite using nosetests + coverage + file watcher
+# usage: testme (from the root of your project)
 alias testme='nosetests -v --with-coverage --cover-package="${PWD##*/}" --with-watch'
 
 # cd ..
 alias ..='cd ..'
+alias cd..='..'
 
 # clear screen
 alias cls='clear'
@@ -155,22 +123,19 @@ function sublime() {
     subl "${@}" > /dev/null 2>&1 &
 }
 
-# git prompt
-get_dir() {
-    printf "%s" $(pwd | sed "s:$HOME:~:")
-}
+# set git prompt
+source /usr/share/git/completion/git-prompt.sh
+
 get_sha() {
     git rev-parse --short HEAD 2>/dev/null
 }
-source /usr/share/git/completion/git-prompt.sh
+
 
 GIT_PS1_SHOWDIRTYSTATE=1
 GIT_PS1_SHOWSTASHSTATE=1
 GIT_PS1_SHOWUNTRACKEDFILES=1
 GIT_PS1_SHOWUPSTREAM="verbose"
-#PS1='[\u@\h \W$(__git_ps1 " (%s)")]\$ '
-#PS1='[\u@\h \W]\$ '  # Default
-#PS1='\[\e[1;32m\]\u@\h:\W$(__git_ps1 " (%s $(get_sha))")\$\[\e[0m\] '
 PS1='\[\e[1;32m\]\W$(__git_ps1 " ($(get_sha) %s)")\$\[\e[0m\] '
 
-export EDITOR=vim # editor used by yaourt
+# default editor used by yaourt
+export EDITOR=vim
