@@ -119,4 +119,5 @@ let g:pymode_lint_on_write = 0
 let g:pymode_lint_on_fly = 1
 let g:pymode_rope = 1
 let g:pymode_rope_goto_definition_cmd = 'vnew'
-noremap <Leader>p :PymodeLintAuto<CR>
+noremap <Leader>L :PymodeLintAuto<CR>
+noremap <Leader>l :PymodeLint<CR>
