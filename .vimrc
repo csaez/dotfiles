@@ -37,6 +37,10 @@ vnoremap <Leader>s :sort<CR>
 " TODO: figure out how to use this for different filetypes
 map <Leader>p :!python %<CR>
 
+" Grep recursively in the project for the word under the cursor
+" and show the results in a quickfix.
+map <Leader>g :vimgrep /<C-R><C-W>/j **<CR>:copen<CR>
+
 " Better indentation
 vnoremap < <gv
 vnoremap > >gv
