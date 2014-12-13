@@ -33,6 +33,10 @@ map <Leader>m <esc>:tabnext<CR>
 " Map sort function to a key
 vnoremap <Leader>s :sort<CR>
 
+" Map execute current file to a key (python)
+" TODO: figure out how to use this for different filetypes
+map <Leader>p :!python %<CR>
+
 " Better indentation
 vnoremap < <gv
 vnoremap > >gv
@@ -116,9 +120,10 @@ let g:ctrlp_max_height = 30
 set wildignore+=*.pyc
 set wildignore+=*_build/*
 set wildignore+=*/coverage/*
+set wildignore+=*/venv/*
 
 " Settings python-mode
-" de ~/.vim/bundle
+" cd ~/.vim/bundle
 " git clone git://github.com/klen/python-mode.git
 let g:pymode_lint_on_write = 0
 let g:pymode_lint_on_fly = 1
