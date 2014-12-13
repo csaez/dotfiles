@@ -47,6 +47,11 @@ au InsertLeave * match ExtraWhitespace /\s\+$/
 set t_Co=256
 color wombat256mod
 
+" Set font to use in gvim
+" Please make sure to have Inconsolata installed on your system, it's free!
+" http://www.levien.com/type/myfonts/inconsolata.html
+set guifont=Inconsolata\ 13
+
 " Syntax highlight
 filetype off
 filetype plugin indent on
