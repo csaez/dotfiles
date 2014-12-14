@@ -112,10 +112,19 @@ call pathogen#helptags()
 " ============================================================================
 " Python IDE Setup
 " ============================================================================
-" Settings for vim-powerline
+" Settings for lightline (vim-powerline fork)
 " cd ~/.vim/bundle
-" git clone git://github.com/Lokaltog/vim-powerline.git
+" git clone https://github.com/itchyny/lightline.vim
+let g:lightline = {
+      \ "colorscheme": "wombat",
+      \ "component": {
+      \   "readonly": '%{&readonly?"x":""}',
+      \ },
+      \ "separator": { "left": "", "right": "" },
+      \ "subseparator": { "left": "|", "right": "|" }
+      \ }
 set laststatus=2
+set noshowmode
 
 " Settings for ctrlp
 " cd ~/.vim/bundle
