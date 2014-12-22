@@ -1,6 +1,27 @@
 set nocompatible
 filetype off
 
+" Set language
+set langmenu=en_US
+let $LANG="en_US"
+source $VIMRUNTIME/delmenu.vim
+source $VIMRUNTIME/menu.vim
+
+" Set font to use in gvim
+" Please make sure to have Inconsolata installed on your system, it's free!
+" http://www.levien.com/type/myfonts/inconsolata.html
+set guifont=Inconsolata\ 13
+
+" Set gvim gui options
+set guioptions-=m
+set guioptions-=T
+set guioptions-=r
+set guioptions-=L
+
+" Set encoding
+set encoding=utf-8
+set fileencodings=utf-8
+
 " Automatic reload of .vimrc
 autocmd! bufwritepost .vimrc source %
 
@@ -33,10 +54,6 @@ map <Leader>m <esc>:tabnext<CR>
 " Map sort function to a key
 vnoremap <Leader>s :sort<CR>
 
-" Map execute current file to a key (python)
-" TODO: figure out how to use this for different filetypes
-map <Leader>p :!python %<CR>
-
 " Grep recursively in the project for the word under the cursor
 " and show the results in a quickfix.
 map <Leader>g :vimgrep /<C-R><C-W>/j **<CR>:copen<CR>
@@ -54,11 +71,6 @@ au InsertLeave * match ExtraWhitespace /\s\+$/
 " wget -0 wombat256mod.vim http://www.vim.org/scripts/download_script
 set t_Co=256
 color wombat256mod
-
-" Set font to use in gvim
-" Please make sure to have Inconsolata installed on your system, it's free!
-" http://www.levien.com/type/myfonts/inconsolata.html
-set guifont=Inconsolata\ 13
 
 " Syntax highlight
 filetype off
@@ -112,10 +124,14 @@ call pathogen#helptags()
 " ============================================================================
 " Python IDE Setup
 " ============================================================================
+" Map execute current file to a key (python)
+" TODO: figure out how to use this for different filetypes
+map <Leader>p :!python %<CR>
+
 " Settings for lightline (vim-powerline fork)
 " cd ~/.vim/bundle
 " git clone https://github.com/itchyny/lightline.vim
-let g:lightline = {
+let g:lightline={
       \ "colorscheme": "wombat",
       \ "component": {
       \   "readonly": '%{&readonly?"x":""}',
@@ -129,7 +145,7 @@ set noshowmode
 " Settings for ctrlp
 " cd ~/.vim/bundle
 " git clone https://github.com/kien/ctrlp.vim.git
-let g:ctrlp_max_height = 30
+let g:ctrlp_max_height=30
 set wildignore+=*.pyc
 set wildignore+=*_build/*
 set wildignore+=*/coverage/*
@@ -138,9 +154,17 @@ set wildignore+=*/venv/*
 " Settings python-mode
 " cd ~/.vim/bundle
 " git clone git://github.com/klen/python-mode.git
-let g:pymode_lint_on_write = 0
-let g:pymode_lint_on_fly = 1
-let g:pymode_rope = 1
-let g:pymode_rope_goto_definition_cmd = 'vnew'
+let g:pymode_lint_on_write=0
+let g:pymode_lint_on_fly=1
+let g:pymode_rope=1
+let g:pymode_rope_goto_definition_cmd="vnew"
 noremap <Leader>L :PymodeLintAuto<CR>
 noremap <Leader>l :PymodeLint<CR>
+
+" Settings surround.vim
+" cd ~/.vim/bundle
+" git clone git://github.com/tpope/vim-surround.git
+
+" Settings snipmate
+" cd ~/.vim/bundle
+" git clone git://github.com/msanders/snipmate.vim.git
