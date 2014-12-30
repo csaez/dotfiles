@@ -68,7 +68,7 @@ au InsertLeave * match ExtraWhitespace /\s\+$/
 
 " ColorScheme
 " mkdir -p ~/.vim/colors && cd ~/.vim/colors
-" wget -0 wombat256mod.vim http://www.vim.org/scripts/download_script
+" curl -so wombat256mod.vim http://www.vim.org/scripts/download_script.php?src_id=13400
 set t_Co=256
 color wombat256mod
 
