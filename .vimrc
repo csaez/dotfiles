@@ -58,10 +58,6 @@ vnoremap <Leader>s :sort<CR>
 " and show the results in a quickfix.
 map <Leader>g :vimgrep /<C-R><C-W>/j **<CR>:copen<CR>
 
-" Better indentation
-vnoremap < <gv
-vnoremap > >gv
-
 " show whitespaces
 autocmd ColorScheme * highlight ExtraWhitespace ctermbg=red guibg=red
 au InsertLeave * match ExtraWhitespace /\s\+$/
@@ -114,6 +110,9 @@ set nobackup
 set nowritebackup
 set noswapfile
 
+" Disable folding on opening
+set nofoldenable
+
 " Setup Pathogen to manage your plugins
 " mkdir -p ~/.vim/autoload ~/.vim/bundle
 " curl -so ~/.vim/autoload/pathogen.vim https://raw.githubusercontent.com/tpope/vim-pathogen/master/autoload/pathogen.vim
@@ -121,12 +120,13 @@ set noswapfile
 call pathogen#infect()
 call pathogen#helptags()
 
-" ============================================================================
-" Python IDE Setup
-" ============================================================================
-" Map execute current file to a key (python)
-" TODO: figure out how to use this for different filetypes
-map <Leader>p :!python %<CR>
+" Settings snipmate
+" cd ~/.vim/bundle
+" git clone git://github.com/msanders/snipmate.vim.git
+
+" Settings surround.vim
+" cd ~/.vim/bundle
+" git clone git://github.com/tpope/vim-surround.git
 
 " Settings for lightline (vim-powerline fork)
 " cd ~/.vim/bundle
@@ -151,20 +151,30 @@ set wildignore+=*_build/*
 set wildignore+=*/coverage/*
 set wildignore+=*/venv/*
 
+" ============================================================================
+" Python IDE Setup
+" ============================================================================
+" Maps to comment and uncomment text blocks (python)
+map <Leader>c :s/^/# <CR>:nohl<CR>
+map <Leader>C :s/^# /<CR>:nohl<CR>
+
+" Run current file
+map <Leader>p :w<CR>:!clear && python %<CR>
+
 " Settings python-mode
 " cd ~/.vim/bundle
 " git clone git://github.com/klen/python-mode.git
-let g:pymode_lint_on_write=0
+let g:pymode_lint_on_write=1
 let g:pymode_lint_on_fly=1
 let g:pymode_rope=1
 let g:pymode_rope_goto_definition_cmd="vnew"
-noremap <Leader>L :PymodeLintAuto<CR>
-noremap <Leader>l :PymodeLint<CR>
+noremap <Leader>l :PymodeLintAuto<CR>
+noremap <Leader>L :PymodeLint<CR>
 
-" Settings surround.vim
-" cd ~/.vim/bundle
-" git clone git://github.com/tpope/vim-surround.git
 
-" Settings snipmate
-" cd ~/.vim/bundle
-" git clone git://github.com/msanders/snipmate.vim.git
+" ============================================================================
+" C/C++ IDE Setup
+" ============================================================================
+" Map :make and run current file to a key
+map <Leader>r :w<CR>:copen<CR>:make<CR><CR>
+
