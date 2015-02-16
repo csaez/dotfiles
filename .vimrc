@@ -120,14 +120,6 @@ set nofoldenable
 call pathogen#infect()
 call pathogen#helptags()
 
-" Settings snipmate
-" cd ~/.vim/bundle
-" git clone git://github.com/msanders/snipmate.vim.git
-
-" Settings surround.vim
-" cd ~/.vim/bundle
-" git clone git://github.com/tpope/vim-surround.git
-
 " Settings for lightline (vim-powerline fork)
 " cd ~/.vim/bundle
 " git clone https://github.com/itchyny/lightline.vim
@@ -151,13 +143,21 @@ set wildignore+=*_build/*
 set wildignore+=*/coverage/*
 set wildignore+=*/venv/*
 
+" Settings snipmate
+" cd ~/.vim/bundle
+" git clone git://github.com/msanders/snipmate.vim.git
+
+" Settings surround.vim
+" cd ~/.vim/bundle
+" git clone https://github.com/tpope/vim-surround.git
+
+" Settings for NERDCommenter
+" cd ~/.vim/bundle
+" git clone https://github.com/scrooloose/nerdcommenter.git
+
 " ============================================================================
 " Python IDE Setup
 " ============================================================================
-" Maps to comment and uncomment text blocks (python)
-map <Leader>c :s/^/# <CR>:nohl<CR>
-map <Leader>C :s/^# /<CR>:nohl<CR>
-
 " Run current file
 map <Leader>p :w<CR>:!clear && python %<CR>
 
@@ -177,4 +177,3 @@ noremap <Leader>L :PymodeLint<CR>
 " ============================================================================
 " Map :make and run current file to a key
 map <Leader>r :w<CR>:copen<CR>:make<CR><CR>
-
