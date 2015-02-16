@@ -145,7 +145,7 @@ set wildignore+=*/venv/*
 
 " Settings snipmate
 " cd ~/.vim/bundle
-" git clone git://github.com/msanders/snipmate.vim.git
+" git clone https://github.com/msanders/snipmate.vim.git
 
 " Settings surround.vim
 " cd ~/.vim/bundle
@@ -163,7 +163,7 @@ map <Leader>p :w<CR>:!clear && python %<CR>
 
 " Settings python-mode
 " cd ~/.vim/bundle
-" git clone git://github.com/klen/python-mode.git
+" git clone https://github.com/klen/python-mode.git
 let g:pymode_lint_on_write=1
 let g:pymode_lint_on_fly=1
 let g:pymode_rope=1
