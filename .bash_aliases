@@ -4,7 +4,7 @@
 # usage: activate venv/
 function activate() { source "$1"bin/activate ;}
 
-# symlink pyside from maya libraries
+# symlink pyside from maya 2014 libraries
 # usage: lnmaya venv/
 function lnmaya() {
 	ln -s /usr/autodesk/maya/lib/python2.7/site-packages/PySide "$1"lib/python2.7/site-packages/PySide ;
@@ -20,9 +20,6 @@ alias testme='clear && nosetests -v --with-coverage --cover-package="${PWD##*/}"
 # cd ..
 alias ..='cd ..'
 alias cd..='..'
-
-# clear screen
-alias cls='clear'
 
 # set git prompt
 source /usr/share/git/completion/git-prompt.sh

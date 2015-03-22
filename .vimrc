@@ -8,9 +8,7 @@ source $VIMRUNTIME/delmenu.vim
 source $VIMRUNTIME/menu.vim
 
 " Set font to use in gvim
-" Please make sure to have Inconsolata installed on your system, it's free!
-" http://www.levien.com/type/myfonts/inconsolata.html
-set guifont=Inconsolata\ 13
+set guifont=Liberation\ Mono\ 12
 
 " Set gvim gui options
 set guioptions-=m
@@ -22,7 +20,7 @@ set guioptions-=L
 set encoding=utf-8
 set fileencodings=utf-8
 
-" Automatic reload of .vimrc
+" Automatic reload .vimrc
 autocmd! bufwritepost .vimrc source %
 
 " Better copy & paste
