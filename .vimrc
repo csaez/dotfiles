@@ -111,6 +111,12 @@ set noswapfile
 " Disable folding on opening
 set nofoldenable
 
+" Bind <C-c> as <Esc>
+inoremap <C-c> <Esc><Esc>
+
+" Complete options (disable preview scratch window)
+set completeopt=menu,menuone,longest
+
 " Setup Pathogen to manage your plugins
 " mkdir -p ~/.vim/autoload ~/.vim/bundle
 " curl -so ~/.vim/autoload/pathogen.vim https://raw.githubusercontent.com/tpope/vim-pathogen/master/autoload/pathogen.vim
