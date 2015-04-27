@@ -13,9 +13,10 @@ function lnmaya() {
 	ln -s /usr/autodesk/maya/lib/python2.7/site-packages/pysideuic "$1"lib/python2.7/site-packages/pysideuic ;
 }
 
-# run testsuite using nosetests + coverage + file watcher
+# run testsuite using nosetests + coverage
 # usage: testme (from the root of your project)
 alias testme='clear && nosetests -v --with-coverage --cover-package="${PWD##*/}" --cover-erase'
+alias unittest='coverage erase && clear && coverage run --source "${PWD##*/}" -m unittest discover && coverage report -m'
 
 # cd ..
 alias ..='cd ..'

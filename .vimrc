@@ -114,6 +114,12 @@ set nofoldenable
 " Bind <C-c> as <Esc>
 inoremap <C-c> <Esc><Esc>
 
+" bind buffer navigation
+nnoremap <silent> [b :bprevious<CR>
+nnoremap <silent> ]b :bnext<CR>
+nnoremap <silent> [B :bfirst<CR>
+nnoremap <silent> ]B :blast<CR>
+
 " Complete options (disable preview scratch window)
 set completeopt=menu,menuone,longest
 
@@ -127,13 +133,13 @@ call pathogen#helptags()
 " Settings for lightline (vim-powerline fork)
 " cd ~/.vim/bundle
 " git clone https://github.com/itchyny/lightline.vim
-let g:lightline={
-      \ "colorscheme": "wombat",
-      \ "component": {
-      \   "readonly": '%{&readonly?"x":""}',
+let g:lightline = {
+      \ 'colorscheme': 'wombat',
+      \ 'component': {
+      \   'readonly': '%{&readonly?"":""}',
       \ },
-      \ "separator": { "left": "", "right": "" },
-      \ "subseparator": { "left": "|", "right": "|" }
+      \ 'separator': { 'left': '', 'right': '' },
+      \ 'subseparator': { 'left': '', 'right': '' }
       \ }
 set laststatus=2
 set noshowmode
@@ -168,10 +174,6 @@ map <Leader>p :w<CR>:!clear && python %<CR>
 " Settings python-mode
 " cd ~/.vim/bundle
 " git clone https://github.com/klen/python-mode.git
-let g:pymode_lint_on_write=1
-let g:pymode_lint_on_fly=1
-let g:pymode_rope=1
-let g:pymode_rope_goto_definition_cmd="vnew"
 noremap <Leader>l :PymodeLintAuto<CR>
 noremap <Leader>L :PymodeLint<CR>
 
