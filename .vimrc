@@ -63,8 +63,11 @@ au InsertLeave * match ExtraWhitespace /\s\+$/
 " ColorScheme
 " mkdir -p ~/.vim/colors && cd ~/.vim/colors
 " curl -so wombat256mod.vim http://www.vim.org/scripts/download_script.php?src_id=13400
-set t_Co=256
-color wombat256mod
+" set t_Co=256
+" color wombat256mod
+color molokai
+let g:rehash256 = 1
+" let g:molokai_original = 1
 
 " Syntax highlight
 filetype off
@@ -134,12 +137,11 @@ call pathogen#helptags()
 " cd ~/.vim/bundle
 " git clone https://github.com/itchyny/lightline.vim
 let g:lightline = {
-      \ 'colorscheme': 'wombat',
       \ 'component': {
-      \   'readonly': '%{&readonly?"":""}',
+      \   'readonly': '%{&readonly?"x":""}',
       \ },
-      \ 'separator': { 'left': '', 'right': '' },
-      \ 'subseparator': { 'left': '', 'right': '' }
+      \ 'separator': { 'left': '', 'right': '' },
+      \ 'subseparator': { 'left': '|', 'right': '|' }
       \ }
 set laststatus=2
 set noshowmode
