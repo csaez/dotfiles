@@ -138,7 +138,6 @@ call vundle#begin()
 " Settings for lightline (vim-powerline fork)
 Plugin 'itchyny/lightline.vim'
 let g:lightline = {
-      \ 'colorscheme': 'wombat',
       \ 'component': {
       \   'readonly': '%{&readonly?"x":""}',
       \ },
