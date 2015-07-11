@@ -1,5 +1,4 @@
 set nocompatible
-filetype off
 
 " Set language
 set langmenu=en_US
@@ -61,14 +60,12 @@ autocmd ColorScheme * highlight ExtraWhitespace ctermbg=red guibg=red
 au InsertLeave * match ExtraWhitespace /\s\+$/
 
 " ColorScheme
-" mkdir -p ~/.vim/colors && cd ~/.vim/colors
-" curl -so wombat256mod.vim http://www.vim.org/scripts/download_script.php?src_id=13400
-set t_Co=256
-color wombat256mod
+color molokai
+let g:rehash256 = 1
+let g:molokai_original = 1
 
 " Syntax highlight
 filetype off
-filetype plugin indent on
 syntax on
 
 " Showing line numbers and length
@@ -123,30 +120,36 @@ nnoremap <silent> ]B :blast<CR>
 " Complete options (disable preview scratch window)
 set completeopt=menu,menuone,longest
 
-" Setup Pathogen to manage your plugins
-" mkdir -p ~/.vim/autoload ~/.vim/bundle
-" curl -so ~/.vim/autoload/pathogen.vim https://raw.githubusercontent.com/tpope/vim-pathogen/master/autoload/pathogen.vim
-" Now you can install any plugin into a .vim/bundle/plugin-name/ folder
-call pathogen#infect()
-call pathogen#helptags()
+" Run current file
+map <Leader>p :w<CR>:!clear && python %<CR>
+
+" Map :make and run current file to a key
+map <Leader>r :w<CR>:copen<CR>:make<CR><CR>
+
+
+"======================
+" Setup Plugins
+"======================
+
+" Setup Vundle to manage your plugins
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
 
 " Settings for lightline (vim-powerline fork)
-" cd ~/.vim/bundle
-" git clone https://github.com/itchyny/lightline.vim
+Plugin 'itchyny/lightline.vim'
 let g:lightline = {
       \ 'colorscheme': 'wombat',
       \ 'component': {
-      \   'readonly': '%{&readonly?"":""}',
+      \   'readonly': '%{&readonly?"x":""}',
       \ },
-      \ 'separator': { 'left': '', 'right': '' },
-      \ 'subseparator': { 'left': '', 'right': '' }
+      \ 'separator': { 'left': '', 'right': '' },
+      \ 'subseparator': { 'left': '|', 'right': '|' }
       \ }
 set laststatus=2
 set noshowmode
 
 " Settings for ctrlp
-" cd ~/.vim/bundle
-" git clone https://github.com/kien/ctrlp.vim.git
+Plugin 'kien/ctrlp.vim.git'
 let g:ctrlp_max_height=30
 set wildignore+=*.pyc
 set wildignore+=*_build/*
@@ -154,32 +157,21 @@ set wildignore+=*/coverage/*
 set wildignore+=*/venv/*
 
 " Settings snipmate
-" cd ~/.vim/bundle
-" git clone https://github.com/msanders/snipmate.vim.git
+Plugin 'msanders/snipmate.vim.git'
 
 " Settings surround.vim
-" cd ~/.vim/bundle
-" git clone https://github.com/tpope/vim-surround.git
+Plugin 'tpope/vim-surround.git'
+
+" Settings fugitive.vim, git for vim
+Plugin 'tpope/vim-fugitive.git'
 
 " Settings for NERDCommenter
-" cd ~/.vim/bundle
-" git clone https://github.com/scrooloose/nerdcommenter.git
-
-" ============================================================================
-" Python IDE Setup
-" ============================================================================
-" Run current file
-map <Leader>p :w<CR>:!clear && python %<CR>
+Plugin 'scrooloose/nerdcommenter.git'
 
 " Settings python-mode
-" cd ~/.vim/bundle
-" git clone https://github.com/klen/python-mode.git
+Plugin 'klen/python-mode.git'
 noremap <Leader>l :PymodeLintAuto<CR>
 noremap <Leader>L :PymodeLint<CR>
 
-
-" ============================================================================
-" C/C++ IDE Setup
-" ============================================================================
-" Map :make and run current file to a key
-map <Leader>r :w<CR>:copen<CR>:make<CR><CR>
+call vundle#end()
+filetype plugin indent on
