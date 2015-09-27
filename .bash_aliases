@@ -38,7 +38,7 @@ GIT_PS1_SHOWDIRTYSTATE=1
 GIT_PS1_SHOWSTASHSTATE=1
 GIT_PS1_SHOWUNTRACKEDFILES=1
 GIT_PS1_SHOWUPSTREAM="verbose"
-PS1='\[\e[1;32m\]\W$(__git_ps1 " ($(get_sha) %s)")\$\[\e[0m\] '
+PS1='\[\e[1;32m\]\w\[\e[0m\] $(__git_ps1 "[$(get_sha) %s]")\$ '
 
 # set default editor, used by yaourt
 export EDITOR=vim

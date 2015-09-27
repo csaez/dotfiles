@@ -7,7 +7,7 @@ source $VIMRUNTIME/delmenu.vim
 source $VIMRUNTIME/menu.vim
 
 " Set font to use in gvim
-set guifont=Liberation\ Mono\ 12
+set guifont=Hack\ 12
 
 " Set gvim gui options
 set guioptions-=m
@@ -50,10 +50,6 @@ map <Leader>m <esc>:tabnext<CR>
 
 " Map sort function to a key
 vnoremap <Leader>s :sort<CR>
-
-" Grep recursively in the project for the word under the cursor
-" and show the results in a quickfix.
-map <Leader>g :vimgrep /<C-R><C-W>/j **<CR>:copen<CR>
 
 " show whitespaces
 autocmd ColorScheme * highlight ExtraWhitespace ctermbg=red guibg=red
@@ -124,7 +120,7 @@ set completeopt=menu,menuone,longest
 map <Leader>p :w<CR>:!clear && python %<CR>
 
 " Map :make and run current file to a key
-map <Leader>r :w<CR>:copen<CR>:make<CR><CR>
+map <Leader>R :w<CR>:copen<CR>:make<CR><CR>
 
 
 "======================
@@ -167,10 +163,15 @@ Plugin 'tpope/vim-fugitive.git'
 " Settings for NERDCommenter
 Plugin 'scrooloose/nerdcommenter.git'
 
+" Settings for jedi-vim
+Plugin 'davidhalter/jedi-vim.git'
+let g:jedi#usages_command = '<leader>N'
+
 " Settings python-mode
 Plugin 'klen/python-mode.git'
 noremap <Leader>l :PymodeLintAuto<CR>
 noremap <Leader>L :PymodeLint<CR>
+let g:pymode_rope=0
 
 call vundle#end()
 filetype plugin indent on
