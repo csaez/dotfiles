@@ -131,15 +131,8 @@ map <Leader>R :w<CR>:copen<CR>:make<CR><CR>
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
 
-" Settings for lightline (vim-powerline fork)
-Plugin 'itchyny/lightline.vim'
-let g:lightline = {
-      \ 'component': {
-      \   'readonly': '%{&readonly?"x":""}',
-      \ },
-      \ 'separator': { 'left': '', 'right': '' },
-      \ 'subseparator': { 'left': '|', 'right': '|' }
-      \ }
+Plugin 'bling/vim-airline'
+let airline_theme='powerlineish'
 set laststatus=2
 set noshowmode
 
@@ -163,15 +156,15 @@ Plugin 'tpope/vim-fugitive.git'
 " Settings for NERDCommenter
 Plugin 'scrooloose/nerdcommenter.git'
 
-" Settings for jedi-vim
-Plugin 'davidhalter/jedi-vim.git'
-let g:jedi#usages_command = '<leader>N'
-
 " Settings python-mode
 Plugin 'klen/python-mode.git'
 noremap <Leader>l :PymodeLintAuto<CR>
 noremap <Leader>L :PymodeLint<CR>
 let g:pymode_rope=0
+
+" Settings for jedi-vim
+Plugin 'davidhalter/jedi-vim.git'
+let g:jedi#usages_command = '<leader>N'
 
 call vundle#end()
 filetype plugin indent on
