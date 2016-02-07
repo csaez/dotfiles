@@ -20,7 +20,7 @@ function lnmaya() {
 # run testsuite using nosetests + coverage
 # usage: testme (from the root of your project)
 alias testme='clear && nosetests -v --with-coverage --cover-package="${PWD##*/}" --cover-erase'
-alias unittest='coverage erase && clear && coverage run --source "${PWD##*/}" -m unittest discover && coverage report -m'
+alias unittest='clear && coverage run --source "${PWD##*/}" -m unittest discover && coverage report -m'
 
 # cd ..
 alias ..='cd ..'
@@ -42,3 +42,4 @@ PS1='\[\e[1;32m\]\w\[\e[0m\] $(__git_ps1 "[$(get_sha) %s]")\$ '
 
 # set default editor, used by yaourt
 export EDITOR=vim
+export TERM=xterm-256color

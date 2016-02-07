@@ -65,6 +65,7 @@ filetype off
 syntax on
 
 " Showing line numbers and length
+set relativenumber
 set number " show line numbers
 set textwidth=79 " width of document (used by gd)
 set nowrap " don't automatically wrap on load
@@ -131,8 +132,10 @@ map <Leader>R :w<CR>:copen<CR>:make<CR><CR>
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
 
-Plugin 'bling/vim-airline'
-let airline_theme='powerlineish'
+Plugin 'vim-airline/vim-airline'
+Plugin 'vim-airline/vim-airline-themes'
+let airline_theme='hybridline'
+let g:airline_powerline_fonts=1
 set laststatus=2
 set noshowmode
 
@@ -164,7 +167,8 @@ let g:pymode_rope=0
 
 " Settings for jedi-vim
 Plugin 'davidhalter/jedi-vim.git'
-let g:jedi#usages_command = '<leader>N'
+let g:jedi#show_call_signatures = "2"
+let g:jedi#usages_command = '<leader>u'
 
 call vundle#end()
 filetype plugin indent on
