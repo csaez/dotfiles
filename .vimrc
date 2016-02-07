@@ -1,5 +1,66 @@
 set nocompatible
 
+"======================
+" Setup Plugins
+"======================
+
+" Setup Vundle to manage your plugins
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+
+" let Vundle manage Vundle, required
+Plugin 'VundleVim/Vundle.vim'
+
+" Airline
+Plugin 'vim-airline/vim-airline'
+Plugin 'vim-airline/vim-airline-themes'
+let airline_theme='hybridline'
+let g:airline_powerline_fonts=1
+set laststatus=2
+set noshowmode
+
+" Settings for ctrlp
+Plugin 'kien/ctrlp.vim.git'
+let g:ctrlp_max_height=30
+set wildignore+=*.pyc
+set wildignore+=*_build/*
+set wildignore+=*/coverage/*
+set wildignore+=*/venv/*
+
+" Settings snipmate
+Plugin 'msanders/snipmate.vim.git'
+
+" Settings surround.vim
+Plugin 'tpope/vim-surround.git'
+
+" Settings fugitive.vim, git for vim
+Plugin 'tpope/vim-fugitive.git'
+
+" Settings for NERDCommenter
+Plugin 'scrooloose/nerdcommenter.git'
+
+" Settings python-mode
+Plugin 'klen/python-mode.git'
+noremap <Leader>l :PymodeLintAuto<CR>
+noremap <Leader>L :PymodeLint<CR>
+let g:pymode_rope=0
+
+" Settings for jedi-vim
+Plugin 'davidhalter/jedi-vim.git'
+let g:jedi#show_call_signatures = "2"
+let g:jedi#usages_command = '<leader>u'
+
+" Color theme
+Plugin 'tomasr/molokai.git'
+
+call vundle#end()
+filetype plugin indent on
+
+
+"======================
+" Settings
+"======================
+
 " Set language
 set langmenu=en_US
 let $LANG="en_US"
@@ -122,53 +183,3 @@ map <Leader>p :w<CR>:!clear && python %<CR>
 
 " Map :make and run current file to a key
 map <Leader>R :w<CR>:copen<CR>:make<CR><CR>
-
-
-"======================
-" Setup Plugins
-"======================
-
-" Setup Vundle to manage your plugins
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
-
-Plugin 'vim-airline/vim-airline'
-Plugin 'vim-airline/vim-airline-themes'
-let airline_theme='hybridline'
-let g:airline_powerline_fonts=1
-set laststatus=2
-set noshowmode
-
-" Settings for ctrlp
-Plugin 'kien/ctrlp.vim.git'
-let g:ctrlp_max_height=30
-set wildignore+=*.pyc
-set wildignore+=*_build/*
-set wildignore+=*/coverage/*
-set wildignore+=*/venv/*
-
-" Settings snipmate
-Plugin 'msanders/snipmate.vim.git'
-
-" Settings surround.vim
-Plugin 'tpope/vim-surround.git'
-
-" Settings fugitive.vim, git for vim
-Plugin 'tpope/vim-fugitive.git'
-
-" Settings for NERDCommenter
-Plugin 'scrooloose/nerdcommenter.git'
-
-" Settings python-mode
-Plugin 'klen/python-mode.git'
-noremap <Leader>l :PymodeLintAuto<CR>
-noremap <Leader>L :PymodeLint<CR>
-let g:pymode_rope=0
-
-" Settings for jedi-vim
-Plugin 'davidhalter/jedi-vim.git'
-let g:jedi#show_call_signatures = "2"
-let g:jedi#usages_command = '<leader>u'
-
-call vundle#end()
-filetype plugin indent on
