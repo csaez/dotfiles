@@ -32,6 +32,7 @@ Plugin 'msanders/snipmate.vim.git'
 
 " Settings surround.vim
 Plugin 'tpope/vim-surround.git'
+Plugin 'tpope/vim-repeat.git'
 
 " Settings fugitive.vim, git for vim
 Plugin 'tpope/vim-fugitive.git'

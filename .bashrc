@@ -1,32 +1,30 @@
-#
-# ~/.bashrc
-#
+#!/usr/bin/env bash
 
-# If not running interactively, don't do anything
-[[ $- != *i* ]] && return
+# Path to the bash it configuration
+export BASH_IT="/home/csaez/.bash_it"
 
-# enable color support of ls and also add handy aliases
-if [ -x /usr/bin/dircolors ]; then
-    test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
-    alias ls='ls --color=auto'
+# Lock and Load a custom theme file
+# location /.bash_it/themes/
+export BASH_IT_THEME='powerline'
 
-    alias grep='grep --color=auto'
-    alias fgrep='fgrep --color=auto'
-    alias egrep='egrep --color=auto'
-fi
+# Your place for hosting Git repos. I use this for private repos.
+export GIT_HOSTING='git@git.domain.com'
 
-alias ls='ls --color=auto'
-alias ll='ls -alF'
-alias la='ls -A'
-alias l='ls -CF'
+# Don't check mail when opening terminal.
+unset MAILCHECK
 
-# set prompt
-PS1='[\u@\h \W]\$ '
+# Change this to your console based IRC client of choice.
+export IRC_CLIENT='irssi'
 
-# disable gui prompt on SSH passwords
-unset SSH_ASKPASS
+# Set this to the command you use for todo.txt-cli
+export TODO="t"
 
-# load custom aliases
-if [ -f ~/.bash_aliases ]; then
-    . ~/.bash_aliases
-fi
+# Set this to false to turn off version control status checking within the prompt for all themes
+export SCM_CHECK=true
+
+# Set vcprompt executable path for scm advance info in prompt (demula theme)
+# https://github.com/xvzf/vcprompt
+#export VCPROMPT_EXECUTABLE=~/.vcprompt/bin/vcprompt
+
+# Load Bash It
+source $BASH_IT/bash_it.sh
