@@ -7,6 +7,11 @@ function activate() { source "$1"bin/activate ;}
 # symlink pyside from maya 2014 libraries
 # usage: lnmaya venv/
 function lnmaya() {
+    rm -rf "$1"lib/python2.7/site-packages/maya;
+	ln -s /usr/autodesk/maya/devkit/other/pymel/extras/completion/py/maya "$1"lib/python2.7/site-packages/maya;
+    rm -rf "$1"lib/python2.7/site-packages/pymel;
+	ln -s /usr/autodesk/maya/devkit/other/pymel/extras/completion/py/pymel "$1"lib/python2.7/site-packages/pymel;
+
     rm -rf "$1"lib/python2.7/site-packages/PySide;
 	ln -s /usr/autodesk/maya/lib/python2.7/site-packages/PySide "$1"lib/python2.7/site-packages/PySide;
 	rm -rf "$1"lib/python2.7/site-packages/shiboken.so;
@@ -19,10 +24,11 @@ function lnmaya() {
 
 # run testsuite using nosetests + coverage
 # usage: testme (from the root of your project)
-alias nosetest='clear && nosetests -v --with-coverage --cover-package="${PWD##*/}" --cover-erase'
-alias unittest='clear && coverage run --source "${PWD##*/}" -m unittest discover && coverage report -m'
+#alias nosetest='clear && nosetests -v --with-coverage --cover-package="${PWD##*/}" --cover-erase'
+alias unittest='clear && coverage run --source "${PWD##*/}" -m unittest discover && coverage report -m || python -m unittest discover'
 
-# set default editor, used by yaourt
-export EDITOR=vim
+# set default editor
+alias vim=nvim
+alias vi=nvim
+export EDITOR=nvim
 export TERM=xterm-256color
-

@@ -1,14 +1,16 @@
 [user]
 	email = cesarte@gmail.com
-	name = csaez
+	name = Cesar Saez
 [color]
 	ui = true
 [push]
 	default = current
+[pull]
+	default = current
 [diff]
-	tool = vimdiff
+	tool = 'nvim -d'
 [merge]
-	tool = vimdiff
+	tool = 'nvim -d'
 [alias]
 	co = checkout
 	ci = commit

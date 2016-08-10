@@ -14,45 +14,79 @@ Plugin 'VundleVim/Vundle.vim'
 " Airline
 Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
-let airline_theme='hybridline'
 let g:airline_powerline_fonts=1
 set laststatus=2
 set noshowmode
 
 " Settings for ctrlp
-Plugin 'kien/ctrlp.vim.git'
+Plugin 'kien/ctrlp.vim'
 let g:ctrlp_max_height=30
 set wildignore+=*.pyc
+set wildignore+=*egg-info/*
+set wildignore+=*/build/*
 set wildignore+=*_build/*
 set wildignore+=*/coverage/*
 set wildignore+=*/venv/*
 
-" Settings snipmate
-Plugin 'msanders/snipmate.vim.git'
-
-" Settings surround.vim
-Plugin 'tpope/vim-surround.git'
-Plugin 'tpope/vim-repeat.git'
-
-" Settings fugitive.vim, git for vim
-Plugin 'tpope/vim-fugitive.git'
+" tpope is the man!
+Plugin 'tpope/vim-surround'
+Plugin 'tpope/vim-repeat'
+Plugin 'tpope/vim-fugitive'
+Plugin 'tpope/vim-unimpaired'
 
 " Settings for NERDCommenter
-Plugin 'scrooloose/nerdcommenter.git'
+Plugin 'scrooloose/nerdcommenter'
 
-" Settings python-mode
-Plugin 'klen/python-mode.git'
-noremap <Leader>l :PymodeLintAuto<CR>
-noremap <Leader>L :PymodeLint<CR>
-let g:pymode_rope=0
+Plugin 'ervandew/supertab'
+let g:SuperTabDefaultCompletionType = "context"
+let g:SuperTabContextDefaultCompletionType = "<c-x><c-o>"
 
-" Settings for jedi-vim
-Plugin 'davidhalter/jedi-vim.git'
-let g:jedi#show_call_signatures = "2"
-let g:jedi#usages_command = '<leader>u'
+" Autocompletion, it's sper fast but need to be compiled
+Plugin 'Valloric/YouCompleteMe'
+nnoremap <c-c>g :YcmCompleter GoTo<CR>
 
-" Color theme
-Plugin 'tomasr/molokai.git'
+" snippets
+Plugin 'SirVer/ultisnips'
+Plugin 'honza/vim-snippets'
+
+let g:UltiSnipsExpandTrigger="<c-j>"
+
+" Linter, needs pylint or flakes8 installed systemwise (but it's great!)
+Plugin 'scrooloose/syntastic'
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
+let g:syntastic_enable_ballons = 0
+
+let g:syntastic_error_symbol = '✗'
+let g:syntastic_warning_symbol = '⚠'
+let g:syntastic_style_error_symbol = '≈'
+let g:syntastic_style_warning_symbol = '≈'
+
+highlight link SyntasticErrorSign SignColumn
+highlight link SyntasticWarningSign SignColumn
+highlight link SyntasticStyleErrorSign SignColumn
+highlight link SyntasticStyleWarningSign SignColumn
+
+
+" Enhaced python syntax highlighting
+Plugin 'avlasyuk/python-syntax'
+let g:python_highlight_all = 1
+
+" Enhaced python indentation
+Plugin 'hynek/vim-python-pep8-indent'
+
+" Color themes
+Plugin 'tomasr/molokai'
+Plugin 'morhetz/gruvbox'
+
+" run maya commands from vim
+Plugin 'vim-scripts/Tail-Bundle'
+Plugin 'http://bitbucket.org/goeb/vimya'
 
 call vundle#end()
 filetype plugin indent on
@@ -85,8 +119,8 @@ set fileencodings=utf-8
 autocmd! bufwritepost .vimrc source %
 
 " Better copy & paste
-set pastetoggle=<F2>
-set clipboard=unnamed
+"set pastetoggle=<F2>
+"set clipboard=unnamed
 
 " mouse and backspace
 set mouse=a
@@ -110,17 +144,25 @@ map <c-h> <c-w>h
 map <Leader>n <esc>:tabprevious<CR>
 map <Leader>m <esc>:tabnext<CR>
 
-" Map sort function to a key
-vnoremap <Leader>s :sort<CR>
-
 " show whitespaces
-autocmd ColorScheme * highlight ExtraWhitespace ctermbg=red guibg=red
-au InsertLeave * match ExtraWhitespace /\s\+$/
+"autocmd ColorScheme * highlight ExtraWhitespace ctermbg=red guibg=red
+"au InsertLeave * match ExtraWhitespace /\s\+$/
+
+" Remove trailing spaces on save (*.py files only)
+autocmd BufWritePre *.py :%s/\s\+$//e
 
 " ColorScheme
+set t_Co=256
+set background=dark
+
 color molokai
+let airline_theme='hybridline'
 let g:rehash256 = 1
 let g:molokai_original = 1
+
+"color gruvbox
+"let airline_theme='gruvbox'
+"let g:gruvbox_contrast_dark='hard'
 
 " Syntax highlight
 filetype off
@@ -170,16 +212,10 @@ set nofoldenable
 " Bind <C-c> as <Esc>
 inoremap <C-c> <Esc><Esc>
 
-" bind buffer navigation
-nnoremap <silent> [b :bprevious<CR>
-nnoremap <silent> ]b :bnext<CR>
-nnoremap <silent> [B :bfirst<CR>
-nnoremap <silent> ]B :blast<CR>
-
 " Complete options (disable preview scratch window)
 set completeopt=menu,menuone,longest
 
-" Run current file
+" Run current python file
 map <Leader>p :w<CR>:!clear && python %<CR>
 
 " Map :make and run current file to a key
