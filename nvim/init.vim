@@ -14,26 +14,44 @@ Plug 'kien/ctrlp.vim'
 Plug 'mhartington/oceanic-next'
 Plug 'vim-airline/vim-airline' | Plug 'vim-airline/vim-airline-themes'
 
-Plug 'benekastah/neomake'
+Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+Plug 'zchee/deoplete-jedi'
+Plug 'neomake/neomake'
+
 Plug 'vhdirk/vim-cmake'
 
 Plug 'vim-scripts/Tail-Bundle'
 Plug 'https://bitbucket.org/goeb/vimya.git'
 
-Plug 'Valloric/YouCompleteMe', { 'do': './install.py' }
-
 Plug 'avlasyuk/python-syntax', { 'for': 'python' }
 Plug 'hynek/vim-python-pep8-indent', { 'for': 'python' }
-Plug 'tmhedberg/SimpylFold', { 'for': 'python' }
+Plug 'heavenshell/vim-pydocstring'
 
-Plug 'derekwyatt/vim-scala', { 'for': 'scala' }
-Plug 'ktvoelker/sbt-vim', { 'for': 'scala' }
+"Plug 'derekwyatt/vim-scala', { 'for': 'scala' }
+"Plug 'ktvoelker/sbt-vim', { 'for': 'scala' }
 
 call plug#end()
 
-"map YCM goto definition
-nnoremap <C-c>g :YcmCompleter GoTo<CR>
-nnoremap K :YcmCompleter GetDoc<CR>
+
+"Configure neomake
+"let g:neomake_python_enabled_makers = ['flake8']
+autocmd! bufwritepost * Neomake
+
+"Configure deoplete
+" Use deoplete.
+let g:deoplete#enable_at_startup = 1
+" Use smartcase.
+let g:deoplete#enable_smart_case = 1
+
+"" <C-h>, <BS>: close popup and delete backword char.
+"inoremap <expr><C-h> deoplete#smart_close_popup()."\<C-h>"
+"inoremap <expr><BS>  deoplete#smart_close_popup()."\<C-h>"
+
+"" <CR>: close popup and save indent.
+"inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
+"function! s:my_cr_function() abort
+"    return deoplete#close_popup() . "\<CR>"
+"endfunction
 
 "configure ultisnipts
 let g:UltiSnipsExpandTrigger="<c-j>"
@@ -65,19 +83,17 @@ let g:python_highlight_all=1
 
 "on save
 autocmd! bufwritepre * :%s/\s\+$//e
-autocmd! bufwritepost * Neomake
 autocmd! bufwritepost init.vim source %
 
 "remap leader
-let mapleader=','
+let mapleader=' '
 
 "clear highlight
-noremap <Leader>, :nohl<CR>
-vnoremap <Leader>, :nohl<CR>
-inoremap <Leader>, :nohl<CR>
+noremap <Leader><Space> :nohl<CR>
+vnoremap <Leader><Space> :nohl<CR>
 
 "set color scheme
-let $NVIM_TUI_ENABLE_TRUE_COLOR=1
+set termguicolors
 set background=dark
 colorscheme OceanicNext
 
@@ -86,7 +102,7 @@ set number
 set relativenumber
 set nowrap
 set cursorline
-set textwidth=100
+set textwidth=99
 set colorcolumn=+1  " highlight column after 'textwidth'
 
 "better search
@@ -108,9 +124,6 @@ set shiftround
 set autoindent
 set expandtab
 
-" Start editing with all folds open
-set foldlevelstart=99
-
 " Map ctrl c as esc
 inoremap <C-c> <Esc><Esc>
 
@@ -125,3 +138,7 @@ map <Leader>g :vimgrep /<C-R><C-W>/ **/*.
 
 " format json
 map <Leader>j :R python -m json.tool #<CR>
+
+" neovim virtual environments
+let g:python_host_prog = '/home/csaez/.nvim/py2/bin/python'
+let g:python3_host_prog = '/home/csaez/.nvim/py3/bin/python'

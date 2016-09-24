@@ -1,2 +1,9 @@
 let g:netrw_dirhistmax  =10
-let g:netrw_dirhist_cnt =0
+let g:netrw_dirhist_cnt =7
+let g:netrw_dirhist_1='/home/csaez/.nvim/plugged/neomake'
+let g:netrw_dirhist_2='/home/csaez/.nvim/plugged/neomake/plugin'
+let g:netrw_dirhist_3='/home/csaez/.nvim/plugged/neomake'
+let g:netrw_dirhist_4='/home/csaez/.nvim/plugged/neomake/autoload'
+let g:netrw_dirhist_5='/home/csaez/.nvim/plugged/neomake/autoload/neomake'
+let g:netrw_dirhist_6='/home/csaez/.nvim/plugged/neomake/autoload/neomake/makers'
+let g:netrw_dirhist_7='/home/csaez/.nvim/plugged/neomake/autoload/neomake/makers/ft'
