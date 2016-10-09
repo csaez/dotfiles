@@ -14,9 +14,12 @@ Plug 'kien/ctrlp.vim'
 Plug 'mhartington/oceanic-next'
 Plug 'vim-airline/vim-airline' | Plug 'vim-airline/vim-airline-themes'
 
-Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-Plug 'zchee/deoplete-jedi'
 Plug 'neomake/neomake'
+
+Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+Plug 'zchee/deoplete-clang'
+Plug 'zchee/deoplete-jedi'
+Plug 'ternjs/tern_for_vim', { 'do': 'npm install' }
 
 Plug 'vhdirk/vim-cmake'
 
@@ -43,16 +46,14 @@ let g:deoplete#enable_at_startup = 1
 " Use smartcase.
 let g:deoplete#enable_smart_case = 1
 
-"" <C-h>, <BS>: close popup and delete backword char.
-"inoremap <expr><C-h> deoplete#smart_close_popup()."\<C-h>"
-"inoremap <expr><BS>  deoplete#smart_close_popup()."\<C-h>"
+" javascript autocomplete
+let g:tern_map_keys = 1
+let g:tern_show_argument_hints = 'on_hold'
+let g:tern_show_signature_in_pum = 1
 
-"" <CR>: close popup and save indent.
-"inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
-"function! s:my_cr_function() abort
-"    return deoplete#close_popup() . "\<CR>"
-"endfunction
-
+" c autocomplete
+let g:deoplete#sources#clang#clang_header = '/usr/lib/clang'
+"
 "configure ultisnipts
 let g:UltiSnipsExpandTrigger="<c-j>"
 
@@ -87,6 +88,7 @@ autocmd! bufwritepost init.vim source %
 
 "remap leader
 let mapleader=' '
+let maplocalleader=' '
 
 "clear highlight
 noremap <Leader><Space> :nohl<CR>
