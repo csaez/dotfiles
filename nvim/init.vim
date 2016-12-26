@@ -7,43 +7,43 @@ Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-unimpaired'
 
 Plug 'ervandew/supertab'
-Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
-Plug 'scrooloose/nerdcommenter'
-Plug 'kien/ctrlp.vim'
+Plug 'SirVer/ultisnips'
+Plug 'honza/vim-snippets'
 
+Plug 'scrooloose/nerdcommenter'
+Plug 'ctrlpvim/ctrlp.vim'
+
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
 Plug 'mhartington/oceanic-next'
-Plug 'vim-airline/vim-airline' | Plug 'vim-airline/vim-airline-themes'
 
 Plug 'neomake/neomake'
-
-Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-Plug 'zchee/deoplete-clang'
-Plug 'zchee/deoplete-jedi'
-Plug 'ternjs/tern_for_vim', { 'do': 'npm install' }
+"Plug 'dojoteef/neomake-autolint'
 
 Plug 'vhdirk/vim-cmake'
 
+Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+Plug 'zchee/deoplete-clang'
+Plug 'Shougo/neoinclude.vim'
+Plug 'ternjs/tern_for_vim', { 'do': 'npm install' }
+Plug 'zchee/deoplete-jedi', { 'for': 'python' }
+
 Plug 'vim-scripts/Tail-Bundle'
-Plug 'https://bitbucket.org/goeb/vimya.git'
+Plug 'https://bitbucket.org/goeb/vimya.git', { 'for': 'python' }
 
 Plug 'avlasyuk/python-syntax', { 'for': 'python' }
 Plug 'hynek/vim-python-pep8-indent', { 'for': 'python' }
-Plug 'heavenshell/vim-pydocstring'
-
-"Plug 'derekwyatt/vim-scala', { 'for': 'scala' }
-"Plug 'ktvoelker/sbt-vim', { 'for': 'scala' }
+Plug 'heavenshell/vim-pydocstring', { 'for': 'python' }
 
 call plug#end()
 
-
 "Configure neomake
-"let g:neomake_python_enabled_makers = ['flake8']
+"let g:neomake_autolint_sign_column_always = 1
+let g:neomake_python_enabled_makers = ['flake8']
 autocmd! bufwritepost * Neomake
 
 "Configure deoplete
-" Use deoplete.
 let g:deoplete#enable_at_startup = 1
-" Use smartcase.
 let g:deoplete#enable_smart_case = 1
 
 " javascript autocomplete
@@ -73,14 +73,6 @@ set wildignore+=*_build/*
 set wildignore+=*/coverage/*
 set wildignore+=*/venv/*
 
-"airline settings
-let g:airline_powerline_fonts=1
-let g:airline_theme='oceanicnext'
-set laststatus=2
-set noshowmode
-
-"python settings
-let g:python_highlight_all=1
 
 "on save
 autocmd! bufwritepre * :%s/\s\+$//e
@@ -95,9 +87,20 @@ noremap <Leader><Space> :nohl<CR>
 vnoremap <Leader><Space> :nohl<CR>
 
 "set color scheme
-set termguicolors
+if (has("termguicolors"))
+ set termguicolors
+endif
+
+" Theme
+syntax enable
 set background=dark
 colorscheme OceanicNext
+
+"airline settings
+let g:airline_powerline_fonts=1
+let g:airline_theme='oceanicnext'
+set laststatus=2
+set noshowmode
 
 "number line
 set number
@@ -129,8 +132,12 @@ set expandtab
 " Map ctrl c as esc
 inoremap <C-c> <Esc><Esc>
 
+"python settings
+let g:python_highlight_all=1
+
 " Run current python file
-map <Leader>p :w<CR>:!python %<CR>
+map <Leader>p :w<CR>:terminal python %<CR>
+map <Leader>mp :w<CR>:!/usr/autodesk/maya/bin/mayapy %<CR>
 
 " Grep word under the cursor
 map <Leader>g :vimgrep /<C-R><C-W>/ **/*.
@@ -144,3 +151,9 @@ map <Leader>j :R python -m json.tool #<CR>
 " neovim virtual environments
 let g:python_host_prog = '/home/csaez/.nvim/py2/bin/python'
 let g:python3_host_prog = '/home/csaez/.nvim/py3/bin/python'
+
+" smooth scroll
+noremap <silent> <c-u> :call smooth_scroll#up(&scroll, 0, 2)<CR>
+noremap <silent> <c-d> :call smooth_scroll#down(&scroll, 0, 2)<CR>
+noremap <silent> <c-b> :call smooth_scroll#up(&scroll*2, 0, 4)<CR>
+noremap <silent> <c-f> :call smooth_scroll#down(&scroll*2, 0, 4)<CR>
