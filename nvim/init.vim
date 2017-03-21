@@ -1,6 +1,5 @@
 call plug#begin('~/.nvim/plugged')
 
-Plug 'tpope/vim-sensible'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-fugitive'
@@ -17,15 +16,11 @@ Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'mhartington/oceanic-next'
 
+Plug 'mhinz/vim-grepper'
 Plug 'neomake/neomake'
-"Plug 'dojoteef/neomake-autolint'
-
-Plug 'vhdirk/vim-cmake'
-
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'zchee/deoplete-clang'
 Plug 'Shougo/neoinclude.vim'
-Plug 'ternjs/tern_for_vim', { 'do': 'npm install' }
 Plug 'zchee/deoplete-jedi', { 'for': 'python' }
 
 Plug 'vim-scripts/Tail-Bundle'
@@ -95,6 +90,8 @@ endif
 syntax enable
 set background=dark
 colorscheme OceanicNext
+"let g:codedark_term256=1
+"colorscheme codedark
 
 "airline settings
 let g:airline_powerline_fonts=1
@@ -136,11 +133,14 @@ inoremap <C-c> <Esc><Esc>
 let g:python_highlight_all=1
 
 " Run current python file
-map <Leader>p :w<CR>:terminal python %<CR>
-map <Leader>mp :w<CR>:!/usr/autodesk/maya/bin/mayapy %<CR>
+map <Leader>p :w<CR>:split \| terminal python %<CR>
+map <Leader>mp :w<CR>:split \| terminal /usr/autodesk/maya/bin/mayapy %<CR>
 
 " Grep word under the cursor
-map <Leader>g :vimgrep /<C-R><C-W>/ **/*.
+nnoremap <leader>* :Grepper -cword -noprompt<CR>
+let g:grepper = {}
+let g:grepper.highlight = 1
+let g:grepper.open = 0
 
 " Paste output external command into scratch buffer
 :command! -nargs=* -complete=shellcmd R vnew | setlocal buftype=nofile bufhidden=hide noswapfile | r !<args>
@@ -152,8 +152,7 @@ map <Leader>j :R python -m json.tool #<CR>
 let g:python_host_prog = '/home/csaez/.nvim/py2/bin/python'
 let g:python3_host_prog = '/home/csaez/.nvim/py3/bin/python'
 
-" smooth scroll
-noremap <silent> <c-u> :call smooth_scroll#up(&scroll, 0, 2)<CR>
-noremap <silent> <c-d> :call smooth_scroll#down(&scroll, 0, 2)<CR>
-noremap <silent> <c-b> :call smooth_scroll#up(&scroll*2, 0, 4)<CR>
-noremap <silent> <c-f> :call smooth_scroll#down(&scroll*2, 0, 4)<CR>
+" terminal settings
+:au BufEnter * if &buftype == 'terminal' | :startinsert | endif
+highlight TermCursor ctermfg=red guifg=red
+tnoremap <Leader><ESC> <C-\><C-n>
