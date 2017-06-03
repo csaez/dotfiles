@@ -1,7 +1,9 @@
 let g:netrw_dirhistmax  =10
-let g:netrw_dirhist_cnt =5
-let g:netrw_dirhist_1='/home/csaez/.oh-my-zsh'
-let g:netrw_dirhist_2='/home/csaez'
-let g:netrw_dirhist_3='/home'
-let g:netrw_dirhist_4='/home/csaez/naming/.git'
-let g:netrw_dirhist_5='/home/csaez/.oh-my-zsh'
+let g:netrw_dirhist_cnt =7
+let g:netrw_dirhist_1='/home/csaez/dev/cesarsaez.me/src'
+let g:netrw_dirhist_2='/home/csaez/dev/cesarsaez.me/src/content'
+let g:netrw_dirhist_3='/home/csaez/dev/cesarsaez.me/src'
+let g:netrw_dirhist_4='/home/csaez/dev/cesarsaez.me/src/theme'
+let g:netrw_dirhist_5='/home/csaez/dev/cesarsaez.me/src/theme/csaez-simple'
+let g:netrw_dirhist_6='/home/csaez/dev/cesarsaez.me/src/theme/csaez-simple/templates'
+let g:netrw_dirhist_7='/home/csaez'

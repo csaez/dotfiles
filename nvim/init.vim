@@ -18,24 +18,29 @@ Plug 'mhartington/oceanic-next'
 
 Plug 'mhinz/vim-grepper'
 Plug 'neomake/neomake'
+Plug 'Shougo/neoinclude.vim', { 'for': 'cpp' }
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-Plug 'zchee/deoplete-clang'
-Plug 'Shougo/neoinclude.vim'
+Plug 'zchee/deoplete-clang', { 'for': 'cpp' }
 Plug 'zchee/deoplete-jedi', { 'for': 'python' }
 
 Plug 'vim-scripts/Tail-Bundle'
 Plug 'https://bitbucket.org/goeb/vimya.git', { 'for': 'python' }
 
+Plug 'davidhalter/jedi-vim', { 'for': 'python' }
 Plug 'avlasyuk/python-syntax', { 'for': 'python' }
 Plug 'hynek/vim-python-pep8-indent', { 'for': 'python' }
 Plug 'heavenshell/vim-pydocstring', { 'for': 'python' }
 
+Plug 'tikhomirov/vim-glsl', { 'for': 'glsl' }
+
 call plug#end()
 
 "Configure neomake
-"let g:neomake_autolint_sign_column_always = 1
 let g:neomake_python_enabled_makers = ['flake8']
 autocmd! bufwritepost * Neomake
+
+"Configure jedi-vim
+let g:jedi#completions_enabled = 0  " completion done by deoplete
 
 "Configure deoplete
 let g:deoplete#enable_at_startup = 1
@@ -48,18 +53,18 @@ let g:tern_show_signature_in_pum = 1
 
 " c autocomplete
 let g:deoplete#sources#clang#clang_header = '/usr/lib/clang'
-"
-"configure ultisnipts
+
+" configure ultisnipts
 let g:UltiSnipsExpandTrigger="<c-j>"
 
-"hide scratch on help
+" hide scratch on help
 set completeopt=menu,menuone,longest
 
-"configure supertab
+" configure supertab
 let g:SuperTabDefaultCompletionType="context"
 let g:SuperTabContextDefaultCompletionType="<c-x><c-o>"
 
-"ctrlp settings
+" ctrlp settings
 let g:ctrlp_max_height=30
 set wildignore+=*.pyc
 set wildignore+=*egg-info/*
@@ -68,36 +73,31 @@ set wildignore+=*_build/*
 set wildignore+=*/coverage/*
 set wildignore+=*/venv/*
 
+" configure grepper (async grep)
+nnoremap <leader>* :Grepper -cword -noprompt<CR>
+let g:grepper = {}
+let g:grepper.highlight = 1
+let g:grepper.open = 0
 
-"on save
-autocmd! bufwritepre * :%s/\s\+$//e
-autocmd! bufwritepost init.vim source %
-
-"remap leader
-let mapleader=' '
-let maplocalleader=' '
-
-"clear highlight
-noremap <Leader><Space> :nohl<CR>
-vnoremap <Leader><Space> :nohl<CR>
-
-"set color scheme
+" set color scheme
 if (has("termguicolors"))
  set termguicolors
 endif
 
-" Theme
+" theme
 syntax enable
 set background=dark
 colorscheme OceanicNext
-"let g:codedark_term256=1
-"colorscheme codedark
 
-"airline settings
+" airline settings
 let g:airline_powerline_fonts=1
 let g:airline_theme='oceanicnext'
 set laststatus=2
 set noshowmode
+
+" on save
+autocmd! bufwritepre * :%s/\s\+$//e      " remove white space
+autocmd! bufwritepost init.vim source %  " source init.vim
 
 "number line
 set number
@@ -132,27 +132,29 @@ inoremap <C-c> <Esc><Esc>
 "python settings
 let g:python_highlight_all=1
 
-" Run current python file
-map <Leader>p :w<CR>:split \| terminal python %<CR>
-map <Leader>mp :w<CR>:split \| terminal /usr/autodesk/maya/bin/mayapy %<CR>
+" remap leader
+let mapleader=' '
+let maplocalleader=' '
 
-" Grep word under the cursor
-nnoremap <leader>* :Grepper -cword -noprompt<CR>
-let g:grepper = {}
-let g:grepper.highlight = 1
-let g:grepper.open = 0
-
-" Paste output external command into scratch buffer
-:command! -nargs=* -complete=shellcmd R vnew | setlocal buftype=nofile bufhidden=hide noswapfile | r !<args>
-
-" format json
-map <Leader>j :R python -m json.tool #<CR>
+" clear highlight
+noremap <Leader><Space> :nohl<CR>
+vnoremap <Leader><Space> :nohl<CR>
 
 " neovim virtual environments
 let g:python_host_prog = '/home/csaez/.nvim/py2/bin/python'
 let g:python3_host_prog = '/home/csaez/.nvim/py3/bin/python'
 
+" Run current python file in neovim terminal emulator
+map <Leader>p :w<CR>:split \| terminal python %<CR>
+map <Leader>mp :w<CR>:split \| terminal /usr/autodesk/maya/bin/mayapy %<CR>
+
+" Paste output external command into scratch buffer
+:command! -nargs=* -complete=shellcmd R vnew | setlocal buftype=nofile bufhidden=hide noswapfile | r !<args>
+
+" pretty format json files
+map <Leader>j :R python -m json.tool #<CR>
+
 " terminal settings
-:au BufEnter * if &buftype == 'terminal' | :startinsert | endif
+:au BufEnter * if &buftype == 'terminal' | :startinsert | endif  " go to insert mode on focus
 highlight TermCursor ctermfg=red guifg=red
 tnoremap <Leader><ESC> <C-\><C-n>
