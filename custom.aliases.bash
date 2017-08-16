@@ -38,5 +38,8 @@ export TERM=xterm-256color
 
 # set PATH so it includes user's private bin if it exists
 if [ -d "$HOME/bin" ] ; then
-    PATH="$HOME/bin:$PATH"
+    PATH="$HOME/.cargo/bin:$HOME/bin:$PATH"
 fi
+
+
+source /etc/profile.d/undistract-me.sh
