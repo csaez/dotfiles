@@ -4,8 +4,8 @@ Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-unimpaired'
+Plug 'machakann/vim-highlightedyank'
 
-Plug 'ervandew/supertab'
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
 
@@ -19,42 +19,30 @@ Plug 'vim-airline/vim-airline-themes'
 Plug 'mhartington/oceanic-next'
 
 Plug 'mhinz/vim-grepper'
-Plug 'neomake/neomake'
-Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 
-Plug 'davidhalter/jedi-vim', { 'for': 'python' }
 Plug 'avlasyuk/python-syntax', { 'for': 'python' }
 Plug 'hynek/vim-python-pep8-indent', { 'for': 'python' }
-Plug 'heavenshell/vim-pydocstring', { 'for': 'python' }
-Plug 'zchee/deoplete-jedi', { 'for': 'python' }
 Plug 'vim-scripts/Tail-Bundle'
 Plug 'https://bitbucket.org/goeb/vimya.git', { 'for': 'python' }
 
+Plug 'peterhoeg/vim-qml', { 'for': 'qml' }
 Plug 'tikhomirov/vim-glsl', { 'for': 'glsl' }
 
-Plug 'rust-lang/rust.vim', { 'for': 'rust' }
-Plug 'sebastianmarkow/deoplete-rust', {'for' : 'rust'}
+Plug 'mattn/emmet-vim', { 'for': ['html', 'css'] }
 
-Plug 'zchee/deoplete-clang', { 'for': 'cpp' }
-Plug 'Shougo/neoinclude.vim', { 'for': 'cpp' }
+" Language server client
+Plug 'roxma/nvim-yarp'  " required by ncm2
+Plug 'ncm2/ncm2'
+
+Plug 'autozimu/LanguageClient-neovim', {
+    \ 'branch': 'next',
+    \ 'do': 'bash install.sh',
+    \ }
 
 call plug#end()
 
-"Configure neomake
-let g:neomake_verbose=0
-let g:neomake_echo_current_error=1
-autocmd! bufwritepost * Neomake
-
-"Configure deoplete
-let g:deoplete#enable_at_startup = 1
-let g:deoplete#enable_smart_case = 1
-
 " configure ultisnipts
 let g:UltiSnipsExpandTrigger="<c-j>"
-
-" configure supertab
-let g:SuperTabDefaultCompletionType="context"
-let g:SuperTabContextDefaultCompletionType="<c-x><c-o>"
 
 " ctrlp settings
 let g:ctrlp_max_height=30
@@ -64,10 +52,13 @@ set wildignore+=*/build/*
 set wildignore+=*_build/*
 set wildignore+=*/coverage/*
 set wildignore+=*/venv/*
+set wildignore+=*target/*  " rust
 
 " set color scheme
 if (has("termguicolors"))
  set termguicolors
+  " disable Background Color Erase (BCE)
+  set t_ut=
 endif
 
 " theme
@@ -85,9 +76,6 @@ set noshowmode
 " on save
 autocmd! bufwritepre * :%s/\s\+$//e      " remove white space
 autocmd! bufwritepost init.vim source %  " source init.vim
-
-" hide scratch on help
-set completeopt=menu,menuone,longest
 
 "number line
 set number
@@ -124,6 +112,11 @@ inoremap <C-c> <Esc><Esc>
 let mapleader=' '
 let maplocalleader=' '
 
+" avoid typos
+:command! W :w
+:command! Wq :wq
+:command! Q :q
+
 " configure grepper (async grep)
 nnoremap <Leader>* :Grepper -tool git -cword -noprompt -noopen -highlight<CR>
 
@@ -140,33 +133,39 @@ map <Leader>j :R python -m json.tool #<CR>
 highlight TermCursor ctermfg=red guifg=red
 tnoremap <Leader><ESC> <C-\><C-n>
 
-
-
 " configure python
 let g:python_host_prog = '/home/csaez/.nvim/py2/bin/python'
 let g:python3_host_prog = '/home/csaez/.nvim/py3/bin/python'
 
 let g:python_highlight_all=1
-let g:jedi#completions_enabled = 0  " completion done by deoplete
-let g:neomake_python_enabled_makers = ['flake8']
 
-map <Leader>p :w<CR>:split \| terminal python %<CR>
-map <Leader>mp :w<CR>:split \| terminal /usr/autodesk/maya/bin/mayapy %<CR>
+map <Leader>py :w<CR>:split \| terminal python %<CR>i<CR>
+map <Leader>pyd :w<CR>:split \| terminal python -m pdb %<CR>
+map <Leader>mpy :w<CR>:split \| terminal /usr/autodesk/maya/bin/mayapy %<CR>
 
+map <Leader>rr :w<CR>:split \| terminal cargo run<CR>
+map <Leader>rb :w<CR>:split \| terminal cargo build<CR>
+map <Leader>rt :w<CR>:split \| terminal cargo test<CR>
 
-" configure rust.vim
-let g:neomake_rust_enabled_makers = ['cargo']
-let g:deoplete#sources#rust#racer_binary='/home/csaez/.cargo/bin/racer'
-let g:deoplete#sources#rust#rust_source_path='/home/csaez/.nvim/rust/src'
+" dasht (documentation)
+nnoremap <Leader>h :tabe \| terminal dasht <Space>
+nnoremap <Leader>hh :tabe \| terminal dasht <C-R><C-W><CR>
 
-map <Leader>r :w<CR>:split \| terminal cargo run<CR>
+" configure lsp
+set hidden  " Required for operations modifying multiple buffers like rename.
+set formatexpr=LanguageClient#textDocument_rangeFormatting_sync()
 
+let g:LanguageClient_serverCommands = {
+    \ 'rust': ['~/.cargo/bin/rustup', 'run', 'stable', 'rls'],
+    \ 'python': ['~/.nvim/py2/bin/pyls'],
+    \ }
 
-" configure javascript autocomplete
-let g:tern_map_keys = 1
-let g:tern_show_argument_hints = 'on_hold'
-let g:tern_show_signature_in_pum = 1
+nnoremap <Leader>gd :call LanguageClient#textDocument_definition()<CR>
+nnoremap <Leader>ide :call LanguageClient_contextMenu()<CR>
+nnoremap <silent> K :call LanguageClient#textDocument_hover()<CR>
 
+" enable ncm2 for all buffers
+autocmd BufEnter * call ncm2#enable_for_buffer()
 
-" configure clang autocomplete
-let g:deoplete#sources#clang#clang_header = '/usr/lib/clang'
+" :help Ncm2PopupOpen for more information
+set completeopt=noinsert,menuone,noselect

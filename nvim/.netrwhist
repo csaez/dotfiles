@@ -1,6 +1,7 @@
 let g:netrw_dirhistmax  =10
-let g:netrw_dirhist_cnt =4
-let g:netrw_dirhist_1='/home/csaez/dev/cesarsaez.me/src'
-let g:netrw_dirhist_2='/home/csaez/dev/cesarsaez.me/src/content'
-let g:netrw_dirhist_3='/home/csaez/dev/slides_testing'
-let g:netrw_dirhist_4='/home/csaez/.oh-my-zsh'
+let g:netrw_dirhist_cnt =5
+let g:netrw_dirhist_1='/home/csaez/.oh-my-zsh/custom'
+let g:netrw_dirhist_2='/home/csaez/dev/rust/communicator/src'
+let g:netrw_dirhist_3='/home/csaez/dev/rust/communicator/src/network'
+let g:netrw_dirhist_4='/home/csaez/dev/rust/communicator/src'
+let g:netrw_dirhist_5='/home/csaez/.oh-my-zsh'
