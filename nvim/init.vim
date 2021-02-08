@@ -134,23 +134,17 @@ nnoremap <silent> gd <cmd>lua vim.lsp.buf.definition()<CR>
 nnoremap <silent> K  <cmd>lua vim.lsp.buf.hover()<CR>
 
 lua <<EOF
-local on_attach_nvim = function(client)
-  require'completion'.on_attach(client)
-end
-
-local nvim_lsp = require'lspconfig'
-nvim_lsp.cmake.setup{}
-nvim_lsp.pyls.setup{}
-nvim_lsp.rls.setup{}
-nvim_lsp.ccls.setup {
+local lspconfig = require'lspconfig'
+lspconfig.cmake.setup {}
+lspconfig.pyls.setup {}
+lspconfig.rls.setup {}
+lspconfig.ccls.setup {
   init_options = {
-    compilationDatabaseDirectory = "";
-    highlight = { lsRanges = true; }
-  }
+    compilationDatabaseDirectory = "build",
+    highlight = {lsRanges = true}
+  };
 }
 EOF
-
-"cmd = { 'ccls', '--init={"compilationDatabaseDirectory": "build", "highlight": {"lsRanges": true}}' };
 
 " use cargo with rust
 autocmd Filetype rust setlocal makeprg=cargo
