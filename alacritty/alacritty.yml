@@ -1,0 +1,64 @@
+env:
+  TERM: alacritty
+
+window:
+  dimensions:
+    columns: 80
+    lines: 34
+  padding:
+    x: 6
+    y: 6
+  decorations: none
+  startup_mode: Maximized
+
+scrolling:
+  history: 10000
+  multiplier: 3
+
+font:
+  normal:
+    family: Roboto Mono for Powerline
+    style: Regular
+
+  bold:
+    family: Roboto Mono for Powerline
+    style: Bold
+
+  italic:
+    family: Roboto Mono for Powerline
+    style: Italic
+
+  bold_italic:
+    family: Roboto Mono for Powerline
+    style: Bold Italic
+  size: 11.0
+
+# Nord color scheme
+colors:
+  # Default colors
+  primary:
+    background: '#2E3440'
+    foreground: '#D8DEE9'
+
+  # Normal colors
+  normal:
+    black:   '#3B4252'
+    red:     '#BF616A'
+    green:   '#A3BE8C'
+    yellow:  '#EBCB8B'
+    blue:    '#81A1C1'
+    magenta: '#B48EAD'
+    cyan:    '#88C0D0'
+    white:   '#E5E9F0'
+
+  # Bright colors
+  bright:
+    black:   '#4C566A'
+    red:     '#BF616A'
+    green:   '#A3BE8C'
+    yellow:  '#EBCB8B'
+    blue:    '#81A1C1'
+    magenta: '#B48EAD'
+    cyan:    '#8FBCBB'
+    white:   '#ECEFF4'
+
