@@ -7,10 +7,11 @@
 	default = current
 [pull]
 	default = current
+	rebase = false
 [diff]
 	tool = 'nvim -d'
 [merge]
-	tool = 'nvim -d'
+	tool = meld
 [alias]
 	co = checkout
 	ci = commit
@@ -19,3 +20,5 @@
 	lo = log --pretty=oneline
 	bl = blame
 	hist = log --pretty=format:\"%h %ad | %s%d [%an]\" --graph --date=short --color
+[credential]
+	helper = store
