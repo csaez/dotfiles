@@ -214,13 +214,7 @@ vim.g.UltiSnipsJumpBackwardTrigger = "<C-k>"
 vim.g.completion_matching_strategy_list = {'exact', 'substring', 'fuzzy'}
 vim.g.completion_enable_snippet = 'UltiSnips'
 
-vim.cmd [[let g:completion_chain_complete_list = {
-    \'default' : [
-    \    {'complete_items': ['lsp', 'snippet']},
-    \    {'mode': '<c-p>'},
-    \    {'mode': '<c-n>'}
-    \]
-    \}]]
+vim.cmd [[let g:completion_chain_complete_list = {'default' : [{'complete_items': ['lsp', 'snippet']}, {'mode': '<c-p>'}, {'mode': '<c-n>'}]}]]
 
 vim.cmd [[autocmd BufEnter * lua require'completion'.on_attach()]]
 vim.opt.completeopt = {'menuone', 'noinsert', 'noselect'}

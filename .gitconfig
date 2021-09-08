@@ -1,3 +1,17 @@
+[user]
+	email = cesarte@gmail.com
+	name = Cesar Saez
+[color]
+	ui = true
+[push]
+	default = current
+[pull]
+	default = current
+	rebase = false
+[diff]
+	tool = 'nvim -d'
+[merge]
+	tool = meld
 [alias]
 	co = checkout
 	ci = commit
@@ -6,3 +20,5 @@
 	lo = log --pretty=oneline
 	bl = blame
 	hist = log --pretty=format:\"%h %ad | %s%d [%an]\" --graph --date=short --color
+[credential]
+	helper = store

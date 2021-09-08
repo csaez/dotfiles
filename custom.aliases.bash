@@ -39,5 +39,7 @@ export TERM=xterm-256color
 
 # set PATH so it includes user's private bin if it exists
 if [ -d "$HOME/bin" ] ; then
-    PATH="$HOME/.cargo/bin:$HOME/bin:$PATH"
+    PATH="$HOME/.cargo/bin:$HOME/bin:$HOME/.local/bin:$PATH"
 fi
+
+alias protonvpn='(cd ~/Downloads/protonvpn && sudo openvpn --config nl-free-01.protonvpn.com.udp.ovpn)'
