@@ -5,54 +5,43 @@ vim.call('plug#begin', '~/.config/nvim/plugged')
 Plug 'kyazdani42/nvim-web-devicons'
 Plug 'ryanoasis/vim-devicons'
 Plug 'arcticicestudio/nord-vim'
+Plug 'folke/todo-comments.nvim'
 Plug 'hoob3rt/lualine.nvim'
 
--- Plug 'psliwka/vim-smoothie'
-Plug('REslim30/vim-smoothie', {['branch'] = 'feature/zt-zz-zb'})
-
-Plug 'nvim-lua/plenary.nvim'
-Plug 'lewis6991/gitsigns.nvim'
-
-Plug('preservim/nerdtree', {['on'] = 'NERDTreeToggle'})
+Plug 'kyazdani42/nvim-tree.lua'
 Plug 'norcalli/nvim-colorizer.lua'
 Plug 'scrooloose/nerdcommenter'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-unimpaired'
-
-Plug 'neovim/nvim-lspconfig'
-Plug 'jackguo380/vim-lsp-cxx-highlight'
-
-Plug 'nvim-lua/completion-nvim'
-Plug 'SirVer/ultisnips'
-Plug 'honza/vim-snippets'
+-- Plug 'psliwka/vim-smoothie'
+Plug('REslim30/vim-smoothie', {['branch'] = 'feature/zt-zz-zb'})
+Plug 'nvim-lua/plenary.nvim'
+Plug 'lewis6991/gitsigns.nvim'
 
 Plug('junegunn/fzf', {['dir'] = '~/.fzf', ['do'] = vim.fn['fzf#install']})
 Plug 'junegunn/fzf.vim'
+
+Plug 'neovim/nvim-lspconfig'
 Plug 'ojroques/nvim-lspfuzzy'
+Plug('jackguo380/vim-lsp-cxx-highlight', {['for'] = 'cpp'})
+Plug('sakhnik/nvim-gdb', { ['for'] = 'cpp', ['do'] = ':!./install.sh' })
+
+-- completion
+Plug 'hrsh7th/cmp-nvim-lsp'
+Plug 'hrsh7th/cmp-buffer'
+Plug 'hrsh7th/cmp-path'
+Plug 'hrsh7th/nvim-cmp'
+Plug 'SirVer/ultisnips'
+Plug 'honza/vim-snippets'
+Plug 'quangnguyen30192/cmp-nvim-ultisnips'
+Plug 'onsails/lspkind-nvim'
 
 vim.call('plug#end')
 
 -- find python
 vim.g.python_host_prog = '/usr/bin/python2'
 vim.g.python3_host_prog = '/usr/bin/python3'
-
--- color scheme (order is important)
-vim.opt.termguicolors = true
-vim.g.nord_cursor_line_number_background = 1
-vim.g.nord_italic = 1
-vim.g.nord_italic_comments = 1
-vim.cmd 'colorscheme nord'
-vim.cmd 'hi LspCxxHlGroupEnumConstant ctermfg=Magenta guifg=#B48EAD cterm=none gui=none'
-vim.cmd 'hi LspCxxHlGroupNamespace ctermfg=Yellow guifg=#EBCB8E cterm=none gui=none'
-vim.cmd 'hi LspCxxHlGroupMemberVariable ctermfg=Blue guifg=#8FBCBB cterm=none gui=none'
-vim.cmd 'hi TermCursor ctermfg=red guifg=#BF616A'
-
--- smooth scroll
-vim.g.smoothie_experimental_mappings = 1
-
--- git signs
-require'gitsigns'.setup{}
 
 -- setup leader
 vim.g.mapleader = ' '
@@ -91,25 +80,56 @@ vim.cmd [[command! Wq :wq]]
 vim.cmd [[command! Q :q]]
 
 -- autocommands
-vim.cmd [[autocmd bufwritepost init.lua source %]]
+vim.cmd [[autocmd bufwritepost init.vim source $MYVIMRC]]
 vim.cmd [[autocmd TextYankPost * lua vim.highlight.on_yank {}]]
 vim.cmd [[autocmd TermOpen * startinsert]]
 
 -- keyboard mapings
-vim.api.nvim_set_keymap('i', '<C-c>', '<Esc><Esc>', {noremap = true})
-vim.api.nvim_set_keymap('', '<Leader><Space>', ':nohl<CR>', {noremap =  true})
-vim.api.nvim_set_keymap('v', '<Leader><Space>', ':nohl<CR>', {noremap =  true})
-vim.api.nvim_set_keymap('t', '<Leader><Esc>', [[<C-\><C-n>]], {noremap =  true})
+local noremap = { noremap=true, silent=true }
+vim.api.nvim_set_keymap('i', '<C-c>', '<Esc><Esc>', noremap)
+vim.api.nvim_set_keymap('', '<Leader><Space>', ':nohl<CR>', noremap)
+vim.api.nvim_set_keymap('v', '<Leader><Space>', ':nohl<CR>', noremap)
+vim.api.nvim_set_keymap('t', '<Leader><Esc>', [[<C-\><C-n>]], noremap)
 
-vim.api.nvim_set_keymap('n', '<Leader>cp', [[:!cp %:p %:p:h/]], {noremap =  true})
-vim.api.nvim_set_keymap('', '<Leader>y', '"+y', {noremap = true})
-vim.api.nvim_set_keymap('', '<Leader>Y', '"+yy', {noremap = true})
-vim.api.nvim_set_keymap('', '<Leader>p', '"+p', {noremap = true})
-vim.api.nvim_set_keymap('', '<Leader>P', '"+P', {noremap = true})
+vim.api.nvim_set_keymap('n', '<Leader>cp', [[:!cp %:p %:p:h/]], noremap)
+vim.api.nvim_set_keymap('', '<Leader>y', '"+y', noremap)
+vim.api.nvim_set_keymap('', '<Leader>Y', '"+yy', noremap)
+vim.api.nvim_set_keymap('', '<Leader>p', '"+p', noremap)
+vim.api.nvim_set_keymap('', '<Leader>P', '"+P', noremap)
 
-vim.api.nvim_set_keymap('n', '<C-p>', ':Files<CR>', {noremap =  true})
-vim.api.nvim_set_keymap('n', '<Leader>*', ':Ag <C-R><C-w><CR>', {noremap =  true})
-vim.api.nvim_set_keymap('n', '<Leader>t', ':NERDTreeToggle<CR>', {noremap =  true})
+vim.api.nvim_set_keymap('n', '<C-p>', ':Files<CR>', noremap)
+vim.api.nvim_set_keymap('n', '<Leader>*', ':Ag <C-R><C-w><CR>', noremap)
+
+-- color scheme (order is important)
+vim.opt.termguicolors = true
+vim.g.nord_cursor_line_number_background = 1
+vim.g.nord_italic = 1
+vim.g.nord_italic_comments = 1
+vim.cmd 'colorscheme nord'
+vim.cmd 'hi LspCxxHlGroupEnumConstant ctermfg=Magenta guifg=#B48EAD cterm=none gui=none'
+vim.cmd 'hi LspCxxHlGroupNamespace ctermfg=Yellow guifg=#EBCB8E cterm=none gui=none'
+vim.cmd 'hi LspCxxHlGroupMemberVariable ctermfg=Blue guifg=#8FBCBB cterm=none gui=none'
+vim.cmd 'hi TermCursor ctermfg=red guifg=#BF616A'
+
+-- todo comments
+require("todo-comments").setup{
+  search = {
+    command = "ag",
+    args = {
+      "--nocolor",
+      "--noheading",
+      "--filename",
+      "--number",
+      "--column",
+    },
+  }
+}
+
+-- smooth scroll
+vim.g.smoothie_experimental_mappings = 1
+
+-- git signs
+require('gitsigns').setup{}
 
 -- lualine setup
 require'lualine'.setup {
@@ -120,6 +140,10 @@ require'lualine'.setup {
   },
   extensions = { 'fzf' }
 }
+
+-- nvim-tree setup
+require'nvim-tree'.setup()
+vim.api.nvim_set_keymap('n', '<Leader>t', ':NvimTreeToggle<CR>', noremap)
 
 -- LSP setup, requires patched nerd font (otherwise ● is a good candidate)
 vim.cmd [[sign define LspDiagnosticsSignError text= texthl=LspDiagnosticsSignError linehl= numhl= ]]
@@ -134,6 +158,62 @@ vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
     update_in_insert = true,
   }
 )
+
+-- setup debugger
+vim.g.nvimgdb_config_override = {
+  key_frameup = '<Leader>p';
+  key_framedown = '<Leader>n';
+}
+
+-- setup colorizer
+require('colorizer').setup{}
+
+-- setup autocomplete
+vim.opt.completeopt = {'menu', 'menuone', 'noselect'}
+
+local lspkind = require('lspkind')
+local cmp = require('cmp')
+
+cmp.setup({
+  snippet = {
+    expand = function(args)
+      vim.fn["UltiSnips#Anon"](args.body)
+    end,
+  },
+  mapping = {
+    ['<C-d>'] = cmp.mapping.scroll_docs(-4),
+    ['<C-f>'] = cmp.mapping.scroll_docs(4),
+    ['<C-Space>'] = cmp.mapping.complete(),
+    ['<C-e>'] = cmp.mapping.close(),
+    ['<CR>'] = cmp.mapping.confirm({ select = true }),
+  },
+  sources = cmp.config.sources({
+    { name = 'nvim_lsp' },
+    { name = 'ultisnips' },
+    { name = 'path' },
+  }, {
+    { name = 'buffer' },
+  }),
+  formatting = {
+    format = lspkind.cmp_format{
+      with_text = true,
+      maxwidth = 50,
+      menu = {
+        nvim_lsp = '[LSP]',
+        ultisnips = '[snip]',
+        path = '[path]',
+        buffer = '[buf]',
+      },
+    },
+  },
+  experimental = {
+    native_menu = false,
+    ghost_text = true,
+  },
+})
+
+-- Setup lspconfig.
+local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
 
 local nvim_lsp = require('lspconfig')
 local on_attach = function(client, bufnr)
@@ -190,9 +270,13 @@ end
 -- and map buffer local keybindings when the language server attaches
 local servers = { "cmake", "pylsp", "rls" }
 for _, lsp in ipairs(servers) do
-  nvim_lsp[lsp].setup { on_attach = on_attach }
+  nvim_lsp[lsp].setup {
+    capabilities = capabilities,
+    on_attach = on_attach
+  }
 end
 nvim_lsp.ccls.setup {
+  capabilities = capabilities,
   on_attach = on_attach,
   init_options = {
     highlight = { lsRanges = true };
@@ -202,22 +286,3 @@ nvim_lsp.ccls.setup {
   }
 }
 require('lspfuzzy').setup {} -- Make LSP client to use FZF instead of quickfix
-
--- setup colorizer
-require 'colorizer'.setup()
-
--- autocomplete
-vim.g.UltiSnipsExpandTrigger = "<C-K>" -- default key (tab) clashes with lua-completion
-vim.g.UltiSnipsJumpForwardTrigger = "<C-j>"
-vim.g.UltiSnipsJumpBackwardTrigger = "<C-k>"
-
-vim.g.completion_matching_strategy_list = {'exact', 'substring', 'fuzzy'}
-vim.g.completion_enable_snippet = 'UltiSnips'
-
-vim.cmd [[let g:completion_chain_complete_list = {'default' : [{'complete_items': ['lsp', 'snippet']}, {'mode': '<c-p>'}, {'mode': '<c-n>'}]}]]
-
-vim.cmd [[autocmd BufEnter * lua require'completion'.on_attach()]]
-vim.opt.completeopt = {'menuone', 'noinsert', 'noselect'}
-vim.g.shortmess = 'filnxtToOFc'
-vim.api.nvim_set_keymap('i', '<Tab>', 'pumvisible() ? "\\<C-n>" : "\\<Tab>"', {noremap = true, expr = true})
-vim.api.nvim_set_keymap('i', '<S-Tab>', 'pumvisible() ? "\\<C-p>" : "\\<S-Tab>"', {noremap = true, expr = true})
