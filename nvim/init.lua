@@ -36,6 +36,7 @@ Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
 Plug 'quangnguyen30192/cmp-nvim-ultisnips'
 Plug 'onsails/lspkind-nvim'
+Plug 'hrsh7th/cmp-nvim-lua'
 
 vim.call('plug#end')
 
@@ -133,12 +134,8 @@ require('gitsigns').setup{}
 
 -- lualine setup
 require'lualine'.setup {
-  options = {
-    theme = 'nord',
-    component_separators = {'', ''},
-    section_separators = {'', ''},
-  },
-  extensions = { 'fzf' }
+  options = { theme = 'nord' },
+  extensions = { 'fzf', 'nvim-tree', 'quickfix' }
 }
 
 -- nvim-tree setup
@@ -189,6 +186,7 @@ cmp.setup({
   },
   sources = cmp.config.sources({
     { name = 'nvim_lsp' },
+    { name = 'nvim_lua' },
     { name = 'ultisnips' },
     { name = 'path' },
   }, {
@@ -196,10 +194,11 @@ cmp.setup({
   }),
   formatting = {
     format = lspkind.cmp_format{
-      with_text = true,
+      with_text = false,
       maxwidth = 50,
       menu = {
         nvim_lsp = '[LSP]',
+        nvim_lua = '[nvim]',
         ultisnips = '[snip]',
         path = '[path]',
         buffer = '[buf]',
