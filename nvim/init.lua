@@ -2,30 +2,33 @@
 local Plug = vim.fn['plug#']
 vim.call('plug#begin', '~/.config/nvim/plugged')
 
+-- theme
 Plug 'kyazdani42/nvim-web-devicons'
 Plug 'ryanoasis/vim-devicons'
 Plug 'arcticicestudio/nord-vim'
 Plug 'folke/todo-comments.nvim'
 Plug 'hoob3rt/lualine.nvim'
 
+-- misc
 Plug 'kyazdani42/nvim-tree.lua'
 Plug 'norcalli/nvim-colorizer.lua'
 Plug 'scrooloose/nerdcommenter'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-unimpaired'
--- Plug 'psliwka/vim-smoothie'
-Plug('REslim30/vim-smoothie', {['branch'] = 'feature/zt-zz-zb'})
+
+-- git
 Plug 'nvim-lua/plenary.nvim'
 Plug 'lewis6991/gitsigns.nvim'
 
+-- fuzzy finder
 Plug('junegunn/fzf', {['dir'] = '~/.fzf', ['do'] = vim.fn['fzf#install']})
 Plug 'junegunn/fzf.vim'
 
+-- lsp
 Plug 'neovim/nvim-lspconfig'
 Plug 'ojroques/nvim-lspfuzzy'
 Plug('jackguo380/vim-lsp-cxx-highlight', {['for'] = 'cpp'})
-Plug('sakhnik/nvim-gdb', { ['for'] = 'cpp', ['do'] = ':!./install.sh' })
 
 -- completion
 Plug 'hrsh7th/cmp-nvim-lsp'
@@ -81,7 +84,6 @@ vim.cmd [[command! Wq :wq]]
 vim.cmd [[command! Q :q]]
 
 -- autocommands
-vim.cmd [[autocmd bufwritepost init.vim source $MYVIMRC]]
 vim.cmd [[autocmd TextYankPost * lua vim.highlight.on_yank {}]]
 vim.cmd [[autocmd TermOpen * startinsert]]
 
@@ -92,7 +94,6 @@ vim.api.nvim_set_keymap('', '<Leader><Space>', ':nohl<CR>', noremap)
 vim.api.nvim_set_keymap('v', '<Leader><Space>', ':nohl<CR>', noremap)
 vim.api.nvim_set_keymap('t', '<Leader><Esc>', [[<C-\><C-n>]], noremap)
 
-vim.api.nvim_set_keymap('n', '<Leader>cp', [[:!cp %:p %:p:h/]], noremap)
 vim.api.nvim_set_keymap('', '<Leader>y', '"+y', noremap)
 vim.api.nvim_set_keymap('', '<Leader>Y', '"+yy', noremap)
 vim.api.nvim_set_keymap('', '<Leader>p', '"+p', noremap)
@@ -100,6 +101,18 @@ vim.api.nvim_set_keymap('', '<Leader>P', '"+P', noremap)
 
 vim.api.nvim_set_keymap('n', '<C-p>', ':Files<CR>', noremap)
 vim.api.nvim_set_keymap('n', '<Leader>*', ':Ag <C-R><C-w><CR>', noremap)
+
+-- use fzf for spell check
+vim.api.nvim_exec([[
+  function! FzfSpellSink(word)
+    exe 'normal! "_ciw'.a:word
+  endfunction
+  function! FzfSpell()
+    let suggestions = spellsuggest(expand("<cword>"))
+    return fzf#run(fzf#wrap({'source': suggestions, 'sink': function("FzfSpellSink"), 'down': 10}))
+  endfunction
+  nnoremap z= :call FzfSpell()<CR>
+  ]], false)
 
 -- color scheme (order is important)
 vim.opt.termguicolors = true
@@ -126,11 +139,8 @@ require("todo-comments").setup{
   }
 }
 
--- smooth scroll
-vim.g.smoothie_experimental_mappings = 1
-
 -- git signs
-require('gitsigns').setup{}
+require('gitsigns').setup()
 
 -- lualine setup
 require'lualine'.setup {
@@ -140,7 +150,7 @@ require'lualine'.setup {
 
 -- nvim-tree setup
 require'nvim-tree'.setup()
-vim.api.nvim_set_keymap('n', '<Leader>t', ':NvimTreeToggle<CR>', noremap)
+vim.api.nvim_set_keymap('n', '<Leader>t', ':NvimTreeFindFileToggle<CR>', noremap)
 
 -- LSP setup, requires patched nerd font (otherwise ● is a good candidate)
 vim.cmd [[sign define LspDiagnosticsSignError text= texthl=LspDiagnosticsSignError linehl= numhl= ]]
@@ -156,14 +166,27 @@ vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
   }
 )
 
--- setup debugger
-vim.g.nvimgdb_config_override = {
-  key_frameup = '<Leader>p';
-  key_framedown = '<Leader>n';
-}
+-- debugger
+vim.api.nvim_exec([[
+  hi debugPC term=reverse ctermbg=darkblue guibg=#4C566A
+  hi debugBreakpoint term=reverse ctermbg=red guibg=#BF616A
+]], false)
+
+vim.cmd [[:packadd termdebug]]
+vim.g.termdebug_wide = 1
+vim.api.nvim_set_keymap('n', '<F4>', ':Run<CR>', noremap)
+vim.api.nvim_set_keymap('n', '<F5>', ':Continue<CR>', noremap)
+vim.api.nvim_set_keymap('n', '<F6>', ':Stop<CR>', noremap)
+vim.api.nvim_set_keymap('n', '<F7>', ':Evaluate<CR>', noremap)
+vim.api.nvim_set_keymap('n', '<F8>', ':Break<CR>', noremap)
+vim.api.nvim_set_keymap('n', '<F9>', ':Over<CR>', noremap)
+vim.api.nvim_set_keymap('n', '<F10>', ':Step<CR>', noremap)
+vim.api.nvim_set_keymap('n', '<F11>', ':Finish<CR>', noremap)
+
+vim.api.nvim_set_keymap('n', '<Leader>dd', [[:call fzf#run(fzf#wrap({'source': 'find ./build -type f -executable -exec file {} \; | grep -wE executable | grep -Po ".*(?=:)"', 'sink': 'Termdebug'}))<CR>]], noremap)
 
 -- setup colorizer
-require('colorizer').setup{}
+require('colorizer').setup()
 
 -- setup autocomplete
 vim.opt.completeopt = {'menu', 'menuone', 'noselect'}
@@ -211,7 +234,7 @@ cmp.setup({
   },
 })
 
--- Setup lspconfig.
+-- Setup lsp
 local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
 
 local nvim_lsp = require('lspconfig')
@@ -253,9 +276,9 @@ local on_attach = function(client, bufnr)
   -- Set autocommands conditional on server_capabilities
   if client.resolved_capabilities.document_highlight then
     vim.api.nvim_exec([[
-      hi LspReferenceRead cterm=bold ctermbg=red guibg=LightYellow
-      hi LspReferenceText cterm=bold ctermbg=red guibg=LightYellow
-      hi LspReferenceWrite cterm=bold ctermbg=red guibg=LightYellow
+      hi LspReferenceRead cterm=bold ctermbg=red guibg=#4C566A
+      hi LspReferenceText cterm=bold ctermbg=red guibg=#4C566A
+      hi LspReferenceWrite cterm=bold ctermbg=red guibg=#4C566A
       augroup lsp_document_highlight
         autocmd! * <buffer>
         autocmd CursorHold <buffer> lua vim.lsp.buf.document_highlight()
@@ -284,4 +307,4 @@ nvim_lsp.ccls.setup {
     compilationDatabaseDirectory = "build";
   }
 }
-require('lspfuzzy').setup {} -- Make LSP client to use FZF instead of quickfix
+require('lspfuzzy').setup {} -- LSP client use FZF instead of quickfix
