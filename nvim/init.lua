@@ -10,6 +10,7 @@ Plug 'folke/todo-comments.nvim'
 Plug 'hoob3rt/lualine.nvim'
 
 -- misc
+Plug 'mhinz/vim-startify'
 Plug 'kyazdani42/nvim-tree.lua'
 Plug 'norcalli/nvim-colorizer.lua'
 Plug 'scrooloose/nerdcommenter'
