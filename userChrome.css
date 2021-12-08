@@ -1,0 +1,52 @@
+/*variables*/
+:root {
+  --sidebar-effective-height: calc(100vh - 80px);
+  --sidebar-collapsed-width: 36px;
+}
+
+/*hide tab bar (replaced by tabcenter reborn addon)*/
+#tabbrowser-tabs {
+  visibility: collapse !important;
+}
+
+/*hide sidebar header*/
+#sidebar-box #sidebar-header {
+  visibility: collapse !important;
+  padding: 0 !important;
+}
+
+/*autohide sidebar*/
+#sidebar-box:not([hidden]) {
+  display: block;
+  position: fixed;
+  min-width: var(--sidebar-collapsed-width);
+  max-width: var(--sidebar-collapsed-width);
+  overflow: hidden;
+  transition: min-width 0.2s ease;
+  z-index:1;
+}
+
+#sidebar, #sidebar-box:hover {
+  min-width: 20vw !important;
+  max-width: 20vw !important;
+}
+
+#sidebar-splitter {
+  display: none;
+}
+
+#sidebar {
+  height: var(--sidebar-effective-height);
+}
+
+#sidebar-box:not([hidden]) ~ #appcontent {
+  margin-left: var(--sidebar-collapsed-width);
+}
+
+#main-window[inFullscreen][inDOMFullscreen] #appcontent {
+  margin-left: 0;
+}
+
+#main-window[inFullscreen] #sidebar {
+  height: 100vh;
+}
