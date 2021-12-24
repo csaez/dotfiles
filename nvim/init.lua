@@ -103,6 +103,9 @@ vim.api.nvim_set_keymap('', '<Leader>P', '"+P', noremap)
 vim.api.nvim_set_keymap('n', '<C-p>', ':Files<CR>', noremap)
 vim.api.nvim_set_keymap('n', '<Leader>*', ':Ag <C-R><C-w><CR>', noremap)
 
+vim.api.nvim_set_keymap('n', 'm<Enter>', ':make!<CR>', noremap)
+vim.api.nvim_set_keymap('n', 'm<Space>', ':make!<Space>', {noremap=true})
+
 -- use fzf for spell check
 vim.api.nvim_exec([[
   function! FzfSpellSink(word)
