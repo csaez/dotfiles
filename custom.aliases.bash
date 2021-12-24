@@ -9,9 +9,9 @@ function pyenv() { source "$1"/bin/activate ;}
 #alias nosetest='clear && nosetests -v --with-coverage --cover-package="${PWD##*/}" --cover-erase'
 alias unittest='clear && coverage run --source "${PWD##*/}" -m unittest discover && coverage report -m || python -m unittest discover'
 
-# set default editor
 alias vim=nvim
 alias vi=nvim
+alias icat="kitty +kitten icat"
 export QT_AUTO_SCREEN_SCALE_FACTOR=0
 export EDITOR=nvim
 export TERM=xterm-256color
