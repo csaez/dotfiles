@@ -1,15 +1,18 @@
--- Plugins
+-- -------------------------------------------
+-- PLUGINS
+-- -------------------------------------------
+
 local Plug = vim.fn['plug#']
 vim.call('plug#begin', '~/.config/nvim/plugged')
 
 -- theme
 Plug 'kyazdani42/nvim-web-devicons'
 Plug 'ryanoasis/vim-devicons'
-Plug 'arcticicestudio/nord-vim'
-Plug 'folke/todo-comments.nvim'
+Plug 'shaunsingh/nord.nvim'
 Plug 'hoob3rt/lualine.nvim'
 
 -- misc
+Plug 'nvim-lua/plenary.nvim'
 Plug 'mhinz/vim-startify'
 Plug 'kyazdani42/nvim-tree.lua'
 Plug 'norcalli/nvim-colorizer.lua'
@@ -19,10 +22,10 @@ Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-unimpaired'
 
 -- git
-Plug 'nvim-lua/plenary.nvim'
 Plug 'lewis6991/gitsigns.nvim'
 
 -- fuzzy finder
+--Plug 'nvim-telescope/telescope.nvim'
 Plug('junegunn/fzf', {['dir'] = '~/.fzf', ['do'] = vim.fn['fzf#install']})
 Plug 'junegunn/fzf.vim'
 
@@ -30,19 +33,27 @@ Plug 'junegunn/fzf.vim'
 Plug 'neovim/nvim-lspconfig'
 Plug 'ojroques/nvim-lspfuzzy'
 Plug('jackguo380/vim-lsp-cxx-highlight', {['for'] = 'cpp'})
+Plug('filipdutescu/renamer.nvim', { ['branch'] = 'master' })
 
 -- completion
 Plug 'hrsh7th/cmp-nvim-lsp'
 Plug 'hrsh7th/cmp-buffer'
 Plug 'hrsh7th/cmp-path'
 Plug 'hrsh7th/nvim-cmp'
-Plug 'SirVer/ultisnips'
-Plug 'honza/vim-snippets'
-Plug 'quangnguyen30192/cmp-nvim-ultisnips'
-Plug 'onsails/lspkind-nvim'
 Plug 'hrsh7th/cmp-nvim-lua'
+Plug 'onsails/lspkind-nvim'
+
+-- snippets
+Plug 'rafamadriz/friendly-snippets'
+Plug 'L3MON4D3/LuaSnip'
+Plug 'saadparwaiz1/cmp_luasnip'
 
 vim.call('plug#end')
+
+
+-- -------------------------------------------
+-- NVIM OPTIONS
+-- -------------------------------------------
 
 -- find python
 vim.g.python_host_prog = '/usr/bin/python2'
@@ -79,118 +90,117 @@ vim.opt.expandtab = true
 vim.opt.list = true
 vim.opt.listchars = [[tab:→\ ,eol:↲]]
 
+
+vim.opt.foldmethod = "syntax"
+vim.opt.foldenable = false
+
 -- avoid typos
-vim.cmd [[command! W :w]]
-vim.cmd [[command! Wq :wq]]
-vim.cmd [[command! Q :q]]
+vim.api.nvim_add_user_command("W", "w", {})
+vim.api.nvim_add_user_command("Wq", "wq", {})
+vim.api.nvim_add_user_command("Q", "q", {})
 
 -- autocommands
-vim.cmd [[autocmd TextYankPost * lua vim.highlight.on_yank {}]]
-vim.cmd [[autocmd TermOpen * startinsert]]
+vim.api.nvim_create_autocmd("TextYankPost", { callback = function() vim.highlight.on_yank{} end })
+vim.api.nvim_create_autocmd("TermOpen", { callback = function() vim.cmd [[ startinsert ]] end })
 
--- keyboard mapings
-local noremap = { noremap=true, silent=true }
-vim.api.nvim_set_keymap('i', '<C-c>', '<Esc><Esc>', noremap)
-vim.api.nvim_set_keymap('', '<Leader><Space>', ':nohl<CR>', noremap)
-vim.api.nvim_set_keymap('v', '<Leader><Space>', ':nohl<CR>', noremap)
-vim.api.nvim_set_keymap('t', '<Leader><Esc>', [[<C-\><C-n>]], noremap)
+-- only show cursorline in the active buffer
+vim.cmd [[
+augroup CursorLine
+    au!
+    au VimEnter,WinEnter,BufWinEnter * setlocal cursorline
+    au WinLeave * setlocal nocursorline
+augroup END
+]]
 
-vim.api.nvim_set_keymap('', '<Leader>y', '"+y', noremap)
-vim.api.nvim_set_keymap('', '<Leader>Y', '"+yy', noremap)
-vim.api.nvim_set_keymap('', '<Leader>p', '"+p', noremap)
-vim.api.nvim_set_keymap('', '<Leader>P', '"+P', noremap)
-
-vim.api.nvim_set_keymap('n', '<C-p>', ':Files<CR>', noremap)
-vim.api.nvim_set_keymap('n', '<Leader>*', ':Ag <C-R><C-w><CR>', noremap)
-
-vim.api.nvim_set_keymap('n', 'm<Enter>', ':make!<CR>', noremap)
-vim.api.nvim_set_keymap('n', 'm<Space>', ':make!<Space>', {noremap=true})
-
--- use fzf for spell check
-vim.api.nvim_exec([[
-  function! FzfSpellSink(word)
-    exe 'normal! "_ciw'.a:word
-  endfunction
-  function! FzfSpell()
-    let suggestions = spellsuggest(expand("<cword>"))
-    return fzf#run(fzf#wrap({'source': suggestions, 'sink': function("FzfSpellSink"), 'down': 10}))
-  endfunction
-  nnoremap z= :call FzfSpell()<CR>
-  ]], false)
-
--- color scheme (order is important)
 vim.opt.termguicolors = true
-vim.g.nord_cursor_line_number_background = 1
-vim.g.nord_italic = 1
-vim.g.nord_italic_comments = 1
-vim.cmd 'colorscheme nord'
+
+-- -------------------------------------------
+-- PLUGINS OPTIONS
+-- -------------------------------------------
+
+-- setup color scheme
+vim.g.nord_contrast = false
+vim.g.nord_borders = true
+vim.g.nord_disable_background = false
+vim.g.nord_italic = true
+require('nord').set()
+
+-- TODO: change these by nvim.api.nvim_set_hl (nvim >= 0.7)
 vim.cmd 'hi LspCxxHlGroupEnumConstant ctermfg=Magenta guifg=#B48EAD cterm=none gui=none'
 vim.cmd 'hi LspCxxHlGroupNamespace ctermfg=Yellow guifg=#EBCB8E cterm=none gui=none'
 vim.cmd 'hi LspCxxHlGroupMemberVariable ctermfg=Blue guifg=#8FBCBB cterm=none gui=none'
-vim.cmd 'hi TermCursor ctermfg=red guifg=#BF616A'
 
--- todo comments
-require("todo-comments").setup{
-  search = {
-    command = "ag",
-    args = {
-      "--nocolor",
-      "--noheading",
-      "--filename",
-      "--number",
-      "--column",
-    },
-  }
-}
+vim.cmd 'hi TermCursor ctermfg=Red guifg=#BF616A'
+vim.cmd 'hi debugPC term=reverse ctermbg=DarkBlue guibg=#4C566A'
+vim.cmd 'hi debugBreakpoint term=reverse ctermbg=Red guibg=#BF616A'
+vim.cmd [[:packadd termdebug]]
+vim.g.termdebug_wide = 1
 
--- git signs
-require('gitsigns').setup()
-
--- lualine setup
-require'lualine'.setup {
+-- setup other plugins
+require('lualine').setup {
   options = { theme = 'nord' },
   extensions = { 'fzf', 'nvim-tree', 'quickfix' }
 }
+vim.opt.laststatus = 3  -- global status line (nvim nightly)
 
--- nvim-tree setup
-require'nvim-tree'.setup()
-vim.api.nvim_set_keymap('n', '<Leader>t', ':NvimTreeFindFileToggle<CR>', noremap)
+require('nvim-tree').setup()
 
--- LSP setup, requires patched nerd font (otherwise ● is a good candidate)
-vim.cmd [[sign define LspDiagnosticsSignError text= texthl=LspDiagnosticsSignError linehl= numhl= ]]
-vim.cmd [[sign define LspDiagnosticsSignWarning text= texthl=LspDiagnosticsSignWarning linehl= numhl= ]]
-vim.cmd [[sign define LspDiagnosticsSignInformation text=🛈 texthl=LspDiagnosticsSignInformation linehl= numhl= ]]
-vim.cmd [[sign define LspDiagnosticsSignHint text=❗ texthl=LspDiagnosticsSignHint linehl= numhl= ]]
-
-vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
-  vim.lsp.diagnostic.on_publish_diagnostics, {
-    virtual_text = false,
-    signs = true,
-    update_in_insert = true,
-  }
-)
-
--- debugger
-vim.api.nvim_exec([[
-  hi debugPC term=reverse ctermbg=darkblue guibg=#4C566A
-  hi debugBreakpoint term=reverse ctermbg=red guibg=#BF616A
-]], false)
-
-vim.cmd [[:packadd termdebug]]
-vim.g.termdebug_wide = 1
-vim.api.nvim_set_keymap('n', '<F4>', ':Run<CR>', noremap)
-vim.api.nvim_set_keymap('n', '<F5>', ':Continue<CR>', noremap)
-vim.api.nvim_set_keymap('n', '<F6>', ':Stop<CR>', noremap)
-vim.api.nvim_set_keymap('n', '<F7>', ':Evaluate<CR>', noremap)
-vim.api.nvim_set_keymap('n', '<F8>', ':Break<CR>', noremap)
-vim.api.nvim_set_keymap('n', '<F9>', ':Over<CR>', noremap)
-vim.api.nvim_set_keymap('n', '<F10>', ':Step<CR>', noremap)
-vim.api.nvim_set_keymap('n', '<F11>', ':Finish<CR>', noremap)
-
-vim.api.nvim_set_keymap('n', '<Leader>dd', [[:call fzf#run(fzf#wrap({'source': 'find ./build -type f -executable -exec file {} \; | grep -wE executable | grep -Po ".*(?=:)"', 'sink': 'Termdebug'}))<CR>]], noremap)
-
--- setup colorizer
 require('colorizer').setup()
+
+require('gitsigns').setup{
+  on_attach = function(bufnr)
+    local gs = package.loaded.gitsigns
+
+    local function map(mode, l, r, opts)
+      opts = opts or {}
+      opts.buffer = bufnr
+      vim.keymap.set(mode, l, r, opts)
+    end
+
+    map('n', ']c', "&diff ? ']c' : '<cmd>Gitsigns next_hunk<CR>'", {expr=true})
+    map('n', '[c', "&diff ? '[c' : '<cmd>Gitsigns prev_hunk<CR>'", {expr=true})
+    map({'n', 'v'}, '<leader>hs', gs.stage_hunk)
+    map({'n', 'v'}, '<leader>hr', gs.reset_hunk)
+    map('n', '<leader>hS', gs.stage_buffer)
+    map('n', '<leader>hu', gs.undo_stage_hunk)
+    map('n', '<leader>hR', gs.reset_buffer)
+    map('n', '<leader>hp', gs.preview_hunk)
+    map('n', '<leader>hb', function() gs.blame_line{full=true} end)
+    map('n', '<leader>hd', gs.diffthis)
+    map('n', '<leader>hD', function() gs.diffthis('~') end)
+    map({'o', 'x'}, 'ih', ':<C-U>Gitsigns select_hunk<CR>')
+  end
+}
+
+-- -------------------------------------------
+-- LSP OPTIONS
+-- -------------------------------------------
+
+-- override floating window borders globally
+local orig_util_open_floating_preview = vim.lsp.util.open_floating_preview
+function vim.lsp.util.open_floating_preview(contents, syntax, opts, ...)
+  opts = opts or {}
+  opts.border = opts.border or "rounded"
+  return orig_util_open_floating_preview(contents, syntax, opts, ...)
+end
+
+-- setup snippets
+local luasnip = require("luasnip") -- snippets
+local types = require("luasnip.util.types")
+require("luasnip.loaders.from_vscode").load()
+
+luasnip.config.set_config {
+  history = true,
+  updateevents = "TextChanged,TextChangedI",
+  enable_autosnippets = true,
+  ext_opts = {
+    [types.choiceNode] = {
+      active = {
+        virt_text = { { "", "Error"} },
+      },
+    },
+  },
+}
 
 -- setup autocomplete
 vim.opt.completeopt = {'menu', 'menuone', 'noselect'}
@@ -201,32 +211,52 @@ local cmp = require('cmp')
 cmp.setup({
   snippet = {
     expand = function(args)
-      vim.fn["UltiSnips#Anon"](args.body)
+      require('luasnip').lsp_expand(args.body)
     end,
   },
   mapping = {
-    ['<C-d>'] = cmp.mapping.scroll_docs(-4),
-    ['<C-f>'] = cmp.mapping.scroll_docs(4),
-    ['<C-Space>'] = cmp.mapping.complete(),
-    ['<C-e>'] = cmp.mapping.close(),
-    ['<CR>'] = cmp.mapping.confirm({ select = true }),
+    ['<C-b>'] = cmp.mapping(cmp.mapping.scroll_docs(-4), { 'i', 'c' }),
+    ['<C-f>'] = cmp.mapping(cmp.mapping.scroll_docs(4), { 'i', 'c' }),
+    ['<C-j>'] = cmp.mapping(function(fallback)
+      if luasnip.expand_or_jumpable(1) then
+        luasnip.expand_or_jump()
+      else
+        fallback()
+      end
+    end, { 'i', 'c' }),
+    ['<C-k>'] = cmp.mapping(function(fallback)
+      if luasnip.jumpable(-1) then
+        luasnip.jump(-1)
+      else
+        fallback()
+      end
+    end, { 'i', 'c' }),
+    ['<C-l>'] = cmp.mapping(function(fallback)
+      if luasnip.choice_active() then
+        luasnip.change_choice(1)
+      else
+        fallback()
+      end
+    end, { 'i', 'c' }),
+    ['<CR>'] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
   },
   sources = cmp.config.sources({
     { name = 'nvim_lsp' },
     { name = 'nvim_lua' },
-    { name = 'ultisnips' },
+    { name = 'luasnip' },
     { name = 'path' },
   }, {
     { name = 'buffer' },
   }),
   formatting = {
     format = lspkind.cmp_format{
+      mode = 'symbol',
       with_text = false,
       maxwidth = 50,
       menu = {
         nvim_lsp = '[LSP]',
         nvim_lua = '[nvim]',
-        ultisnips = '[snip]',
+        luasnip = '[snip]',
         path = '[path]',
         buffer = '[buf]',
       },
@@ -238,7 +268,20 @@ cmp.setup({
   },
 })
 
--- Setup lsp
+-- setup diagnostic signs
+vim.fn.sign_define("DiagnosticSignError", { text = "", texthl = "DiagnosticSignError" })
+vim.fn.sign_define("DiagnosticSignWarn", { text = "", texthl = "DiagnosticSignWarn" })
+vim.fn.sign_define("DiagnosticSignInfo", { text = "", texthl = "DiagnosticSignInfo" })
+vim.fn.sign_define("DiagnosticSignHint", { text = "", texthl = "DiagnosticSignHint" })
+
+vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
+  vim.lsp.diagnostic.on_publish_diagnostics, {
+    virtual_text = false,
+    signs = true,
+    update_in_insert = true,
+  }
+)
+
 local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
 
 local nvim_lsp = require('lspconfig')
@@ -259,12 +302,11 @@ local on_attach = function(client, bufnr)
   buf_set_keymap('n', '<Leader>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>', opts)
   buf_set_keymap('n', '<Leader>wl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', opts)
   buf_set_keymap('n', '<Leader>D', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
-  buf_set_keymap('n', '<Leader>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
   buf_set_keymap('n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
-  buf_set_keymap('n', '<Leader>e', '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>', opts)
-  buf_set_keymap('n', '[d', '<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>', opts)
-  buf_set_keymap('n', ']d', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>', opts)
-  buf_set_keymap('n', '<Leader>q', '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>', opts)
+  buf_set_keymap('n', '<Leader>e', '<cmd>lua vim.diagnostic.open_float()<CR>', opts)
+  buf_set_keymap('n', '[d', '<cmd>lua vim.diagnostic.goto_prev()<CR>', opts)
+  buf_set_keymap('n', ']d', '<cmd>lua vim.diagnostic.goto_next()<CR>', opts)
+  buf_set_keymap('n', '<Leader>q', '<cmd>lua vim.diagnostic.setloclist()<CR>', opts)
 
   -- Set some keybinds conditional on server capabilities
   if client.resolved_capabilities.document_formatting then
@@ -275,20 +317,6 @@ local on_attach = function(client, bufnr)
   end
   if client.resolved_capabilities.code_action then
     buf_set_keymap("n", "<Leader>a", "<cmd>lua vim.lsp.buf.code_action()<CR>", opts)
-  end
-
-  -- Set autocommands conditional on server_capabilities
-  if client.resolved_capabilities.document_highlight then
-    vim.api.nvim_exec([[
-      hi LspReferenceRead cterm=bold ctermbg=red guibg=#4C566A
-      hi LspReferenceText cterm=bold ctermbg=red guibg=#4C566A
-      hi LspReferenceWrite cterm=bold ctermbg=red guibg=#4C566A
-      augroup lsp_document_highlight
-        autocmd! * <buffer>
-        autocmd CursorHold <buffer> lua vim.lsp.buf.document_highlight()
-        autocmd CursorMoved <buffer> lua vim.lsp.buf.clear_references()
-      augroup END
-    ]], false)
   end
 end
 
@@ -305,10 +333,71 @@ nvim_lsp.ccls.setup {
   capabilities = capabilities,
   on_attach = on_attach,
   init_options = {
-    highlight = { lsRanges = true };
-    index = { threads = 0 };
-    completion = { detailedLabel = false };
+    highlight = { lsRanges = true; };
+    index = { threads = 0; };
+    completion = { detailedLabel = false; };
     compilationDatabaseDirectory = "build";
   }
 }
-require('lspfuzzy').setup {} -- LSP client use FZF instead of quickfix
+
+-- use FZF as picker for anything LSP related
+require('lspfuzzy').setup {}
+
+-- nicer LSP renamer floating dialog
+require("renamer").setup {}
+
+-- -------------------------------------------
+-- MAPPINGS
+-- -------------------------------------------
+
+local noremap = { noremap=true, silent=true }
+vim.api.nvim_set_keymap('n', '<Leader>rn', '<cmd>lua require("renamer").rename()<cr>', noremap)
+vim.api.nvim_set_keymap('v', '<Leader>rn', '<cmd>lua require("renamer").rename()<cr>', noremap)
+
+vim.api.nvim_set_keymap('i', '<C-c>', '<Esc><Esc>', noremap)
+vim.api.nvim_set_keymap('', '<Leader><Space>', ':nohl<CR>', noremap)
+vim.api.nvim_set_keymap('v', '<Leader><Space>', ':nohl<CR>', noremap)
+vim.api.nvim_set_keymap('t', '<Leader><Esc>', [[<C-\><C-n>]], noremap)
+
+vim.api.nvim_set_keymap('', '<Leader>y', '"+y', noremap)
+vim.api.nvim_set_keymap('', '<Leader>Y', '"+yy', noremap)
+vim.api.nvim_set_keymap('', '<Leader>p', '"+p', noremap)
+vim.api.nvim_set_keymap('', '<Leader>P', '"+P', noremap)
+
+vim.api.nvim_set_keymap('n', '<C-p>', ':Files<CR>', noremap)
+vim.api.nvim_set_keymap('n', '<Leader>*', ':Ag <C-R><C-w><CR>', noremap)
+
+vim.api.nvim_set_keymap('n', 'm<Enter>', ':make<CR>', noremap)
+vim.api.nvim_set_keymap('n', 'm<Space>', ':make<Space>', {noremap=true})
+
+-- use fzf for spell check
+vim.api.nvim_exec([[
+  function! FzfSpellSink(word)
+    exe 'normal! "_ciw'.a:word
+  endfunction
+
+  function! FzfSpell()
+    let suggestions = spellsuggest(expand("<cword>"))
+    return fzf#run(fzf#wrap({'source': suggestions, 'sink': function("FzfSpellSink"), 'down': 10}))
+  endfunction
+
+  nnoremap z= :call FzfSpell()<CR>
+  ]], false)
+
+-- toggle tree
+vim.api.nvim_set_keymap('n', '<Leader>t', ':NvimTreeFindFileToggle<CR>', noremap)
+
+-- debugger
+-- fx and xx are user defined scripts in $PATH finding/running executables in the current dir (recursively)
+vim.api.nvim_set_keymap('n', '<Leader>xx', [[ :tabe | term xx<CR> ]], noremap)
+vim.api.nvim_set_keymap('n', '<Leader>dd', [[ :call fzf#run(fzf#wrap({'source': 'fx', 'sink': 'Termdebug'}))<CR>]], noremap)
+vim.api.nvim_set_keymap('n', '<Leader>dq', ':Gdb<CR>:startinsert<CR>quit<CR>', noremap)
+vim.api.nvim_set_keymap('n', '<Leader>db', ':Break<CR>', noremap)
+vim.api.nvim_set_keymap('n', '<Leader>dc', ':Clear<CR>', noremap)
+vim.api.nvim_set_keymap('n', '<Leader>dk', ':Evaluate<CR>', noremap)
+vim.api.nvim_set_keymap('n', '<Leader><Up>', ':call TermDebugSendCommand("run")<CR>', noremap)
+vim.api.nvim_set_keymap('n', '<Leader><Right>', ':call TermDebugSendCommand("next")<CR>', noremap)
+vim.api.nvim_set_keymap('n', '<Leader><Left>', ':call TermDebugSendCommand("continue")<CR>', noremap)
+vim.api.nvim_set_keymap('n', '<Leader><Down>', ':call TermDebugSendCommand("step")<CR>', noremap)
+vim.api.nvim_set_keymap('n', '<Leader><PageUp>', ':call TermDebugSendCommand("up")<CR>', noremap)
+vim.api.nvim_set_keymap('n', '<Leader><PageDown>', ':call TermDebugSendCommand("down")<CR>', noremap)
